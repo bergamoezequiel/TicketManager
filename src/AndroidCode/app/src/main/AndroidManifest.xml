@@ -16,7 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Menu"></activity>
+        <activity android:name=".Menu" />
+        <activity android:name=".MainActivity_VerEspectaculos" />
+        <activity android:name=".MainActivity_MisEntradas" />
+        <activity android:name=".MainActivity_MisCodigosPromocionales" />
+        <activity android:name=".MainActivity_Alertas"></activity>
     </application>
 
 </manifest>

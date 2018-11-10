@@ -14,6 +14,19 @@ public class Menu extends AppCompatActivity {
     }
 
     public void VerEspectaculosBottonAction(View view) {
-
+        Intent intent = new Intent(this, MainActivity_VerEspectaculos.class);
+        startActivity(intent);
+    }
+    public void MisEntradasBottonAction(View view) {
+        Intent intent = new Intent(this, MainActivity_MisEntradas.class);
+        startActivity(intent);
+    }
+    public void CodigosPromocionalesBottonAction(View view) {
+        Intent intent = new Intent(this, MainActivity_MisCodigosPromocionales.class);
+        startActivity(intent);
+    }
+    public void AlertasBottonAction(View view) {
+        Intent intent = new Intent(this, MainActivity_Alertas.class);
+        startActivity(intent);
     }
 }
