@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.domain.appinfo.ticketmanager">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,7 +22,9 @@
         <activity android:name=".MainActivity_VerEspectaculos" />
         <activity android:name=".MainActivity_MisEntradas" />
         <activity android:name=".MainActivity_MisCodigosPromocionales" />
-        <activity android:name=".MainActivity_Alertas"></activity>
+        <activity android:name=".MainActivity_Alertas" />
+        <activity android:name=".VerEspectaculos_VerListadoDeEspectaculos" />
+        <activity android:name=".VerEspectaculos_VerFunciones"></activity>
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
+
 </manifest>

@@ -25,21 +25,23 @@ import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidad
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class MainActivity_VerEspectaculos extends AppCompatActivity {
+public class VerEspectaculos_VerListadoDeEspectaculos extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main__ver_espectaculos);
-        ConsultarEmpresasEmisoras();
-    }
+        setContentView(R.layout.activity_ver_espectaculos__ver_listado_de_espectaculos);
+        ConsultarFuncionesDeEmpresa(getIntent().getStringExtra("cuitEmpresa"));
 
-    private void ConsultarEmpresasEmisoras(){
+    }
+    private void ConsultarFuncionesDeEmpresa(String cuitEmpresa){
         String tag_json_obj = "json_obj_req";
         final ProgressDialog pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
         pDialog.show();
-        String url =UrlBackend.URL+"/Empresas";
+
+        String url =UrlBackend.URL+"/Espectaculos?cuitEmp="+cuitEmpresa;
+        pDialog.setMessage(url);
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 url, null,
                 new Response.Listener<JSONObject>() {
@@ -66,38 +68,37 @@ public class MainActivity_VerEspectaculos extends AppCompatActivity {
 
 
     private void RespuestaJSON(JSONObject response) {
-        TextView text= (TextView) findViewById(R.id.textView);
+        TextView text = (TextView) findViewById(R.id.textView);
+        text.setText(response.toString());
         JSONArray jsonArr;
-        String[] RazonesSociales=new String[0];
-        String[] Cuits=new String[0];
+        //Se arman dos listados, de nombres y descripciones para pasarselo al adaptador de la lista
+        String[] NombreEspectaculos=new String[0];
+        String[] DescripcionesEspectaculos=new String[0];
         try {
-            jsonArr = response.getJSONArray("Empresas");
-            RazonesSociales=new String[jsonArr.length()];
-            Cuits=new String[jsonArr.length()];
+            jsonArr = response.getJSONArray("Espectaculos");
+            NombreEspectaculos=new String[jsonArr.length()];
+            DescripcionesEspectaculos=new String[jsonArr.length()];
             for(int i=0;i<jsonArr.length();i++){
                 JSONObject jsonEmpresa = jsonArr.getJSONObject(i);
-                RazonesSociales[i]=jsonEmpresa.getString("RazonSocial");
-                Cuits[i]=jsonEmpresa.getString("CUIT");
+                NombreEspectaculos[i]=jsonEmpresa.getString("Nombre");
+                DescripcionesEspectaculos[i]=jsonEmpresa.getString("Descripcion");
 
             }
         }catch(Exception e){}
 
-        try {
-            text.setText(String.valueOf(response.getString("Empresas")));
-
-        }catch(Exception e){}
-
-        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, RazonesSociales,Cuits);
+        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, NombreEspectaculos,DescripcionesEspectaculos);
         final ListView listview = (ListView) findViewById(R.id.listView);
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               // TextView text= (TextView) findViewById(R.id.textView);
-               // text.setText(parent.getItemAtPosition(position).toString());
+                // TextView text= (TextView) findViewById(R.id.textView);
+                // text.setText(parent.getItemAtPosition(position).toString());
                 iniciarVerFunciones(parent.getItemAtPosition(position).toString());
             }
         });
+
+
     }
 
     public void iniciarVerFunciones(String cuit){
@@ -108,16 +109,13 @@ public class MainActivity_VerEspectaculos extends AppCompatActivity {
     }
 
 
-
-
-
     public class MySimpleArrayAdapter extends ArrayAdapter<String> {
         private final Context context;
         private final String[] razonesSociales;
         private final String[] cuits;
 
         public MySimpleArrayAdapter(Context context, String[] razonesSociales, String[] cuits) {
-            super(context, R.layout.rowlayout_empresas_emisoras, cuits);
+            super(context, R.layout.rowlayout_espectaculos, cuits);
             this.context = context;
             this.razonesSociales = razonesSociales;
             this.cuits=cuits;
@@ -146,5 +144,6 @@ public class MainActivity_VerEspectaculos extends AppCompatActivity {
             return rowView;
         }
     }
+
 
 }
