@@ -1,0 +1,27 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/Dia"
+        android:layout_width="100dp"
+        android:layout_height="55dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/icon"
+        android:text="@+id/label"
+        android:textSize="50px" />
+
+    <TextView
+        android:id="@+id/Hora"
+        android:layout_width="100dp"
+        android:layout_height="55dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/icon"
+        android:text="@+id/label"
+        android:textSize="50px"/>
+</LinearLayout>

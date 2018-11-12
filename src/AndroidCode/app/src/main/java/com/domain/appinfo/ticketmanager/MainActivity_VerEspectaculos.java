@@ -95,12 +95,12 @@ public class MainActivity_VerEspectaculos extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                // TextView text= (TextView) findViewById(R.id.textView);
                // text.setText(parent.getItemAtPosition(position).toString());
-                iniciarVerFunciones(parent.getItemAtPosition(position).toString());
+                iniciarVerListadoDeEspectaculos(parent.getItemAtPosition(position).toString());
             }
         });
     }
 
-    public void iniciarVerFunciones(String cuit){
+    public void iniciarVerListadoDeEspectaculos(String cuit){
         Intent intent2 = new Intent(this, VerEspectaculos_VerListadoDeEspectaculos.class);
         intent2.putExtra("cuitEmpresa",cuit);
 
