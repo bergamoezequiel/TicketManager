@@ -26,7 +26,7 @@ class Cliente(Resource):
 
 class Clientes(Resource):
 	def get(self):  
-		Clientes=[]
+		Clientes={}
 		conn = sqlite3.connect('TicketManager.db')
 		c = conn.cursor()
 		for row in c.execute('SELECT * FROM CLIENTES'):
@@ -39,7 +39,7 @@ class Clientes(Resource):
 			}
 			Clientes.append(user);
 		conn.close()
-		return Clientes, 200
+		return Cliente, 200
 
 class EmpresasEmisoras(Resource):
 	def get(self):  
@@ -122,7 +122,7 @@ class Entradas(Resource):
 
 class Intereses(Resource):
 	def post(self):
-			Entradas=[]
+			Entradas={}
 			conn = sqlite3.connect('TicketManager.db')
 			c = conn.cursor()
 			print(request)

@@ -12,18 +12,19 @@ import org.json.JSONObject;
 
 public class Menu extends AppCompatActivity {
 
-
+    public Cliente cliente;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         TextView TextV = (TextView) findViewById(R.id.textView);
-        Cliente cliente=this.CrearCliente();
+        this.cliente=this.CrearCliente();
         TextV.setText("Bienvenido "+ cliente.GetNombre()+" "+cliente.GetApellido());
     }
 
     public void VerEspectaculosBottonAction(View view) {
         Intent intent = new Intent(this, MainActivity_VerEspectaculos.class);
+        intent.putExtra("IdCliente",this.cliente.GetId() );
         startActivity(intent);
     }
     public void MisEntradasBottonAction(View view) {

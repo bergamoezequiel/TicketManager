@@ -3,6 +3,8 @@ package com.domain.appinfo.ticketmanager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,6 +27,8 @@ import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidad
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import static android.widget.Toast.LENGTH_LONG;
+
 public class VerEspectaculos_VerEntradas extends AppCompatActivity {
 
     @Override
@@ -32,7 +36,7 @@ public class VerEspectaculos_VerEntradas extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ver_espectaculos__ver_entradas);
         TextView text = (TextView) findViewById(R.id.textView);
-        text.setText(getIntent().getStringExtra("IdFuncion"));
+        text.setText(getIntent().getStringExtra("IdFuncion")+getIntent().getStringExtra("IdCliente"));
         ConsultarUbicaciones(getIntent().getStringExtra("IdFuncion"));
     }
 
@@ -142,4 +146,51 @@ public class VerEspectaculos_VerEntradas extends AppCompatActivity {
             return rowView;
         }
     }
+
+    public void GuardarInteresBottonAction(View view){
+       JSONObject json= new JSONObject();
+       try {
+           json.put("IdCliente", getIntent().getStringExtra("IdCliente"));
+           json.put("IdFuncion", getIntent().getStringExtra("IdFuncion"));
+       }catch(Exception e){}
+        GuardarInteres(json);
+
+      
+
+    }
+
+    private void GuardarInteres(JSONObject json){
+        String tag_json_obj = "json_obj_req";
+        final ProgressDialog pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+
+        String url =UrlBackend.URL+"/Intereses";
+        pDialog.setMessage(url);
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+                url, json,
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        pDialog.hide();
+                        RespuestaJSON2(response);
+
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+
+        RequestQueue requestQueue= Volley.newRequestQueue(this);
+        requestQueue.add(jsonObjReq);
+
+
+    }
+    private void RespuestaJSON2(JSONObject response) {
+
+    }
+
 }

@@ -41,6 +41,9 @@ public class Cliente {
     public String NombreUsuario(){
         return this.nombreUsuario;
     }
+    public String GetId(){
+        return this.id;
+    }
 
 
 }

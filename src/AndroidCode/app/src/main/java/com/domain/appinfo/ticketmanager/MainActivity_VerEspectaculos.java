@@ -103,6 +103,7 @@ public class MainActivity_VerEspectaculos extends AppCompatActivity {
     public void iniciarVerListadoDeEspectaculos(String cuit){
         Intent intent2 = new Intent(this, VerEspectaculos_VerListadoDeEspectaculos.class);
         intent2.putExtra("cuitEmpresa",cuit);
+        intent2.putExtra("IdCliente",getIntent().getStringExtra("IdCliente"));
 
         startActivity(intent2);
     }

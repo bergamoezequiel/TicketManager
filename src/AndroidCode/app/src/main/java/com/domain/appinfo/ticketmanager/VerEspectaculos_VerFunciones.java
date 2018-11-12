@@ -111,6 +111,7 @@ public class VerEspectaculos_VerFunciones extends AppCompatActivity {
         Intent intent2 = new Intent(this, VerEspectaculos_VerEntradas.class);
         intent2.putExtra("IdFuncion",funcion);
         //intent2.putExtra("IdEspectaculo",idEspectaculo);
+        intent2.putExtra("IdCliente",getIntent().getStringExtra("IdCliente"));
         startActivity(intent2);
 
 
