@@ -4,7 +4,7 @@ from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
 
 app = Flask(__name__)
-app.config['SERVER_NAME'] = '192.168.43.147:5000'
+app.config['SERVER_NAME'] = '192.168.0.110:5000'
 api = Api(app)
 
 
@@ -119,6 +119,29 @@ class Entradas(Resource):
 		}
 		return EntradasFinal,200
 		
+class InfoCompletaEntradas(Resource):#recibe usuario como filtro
+	def get(self):
+		Entradas=[]
+		conn = sqlite3.connect('TicketManager.db')
+		c = conn.cursor()
+		c2 = conn.cursor()
+		for row in c.execute('SELECT * FROM Entradas where ID_CLIENTE=?',(request.args.get('IdCliente'), )):
+			funcion = {
+			"Hora":c2.execute('SELECT HORA FROM FUNCIONES where ID_FUNCION=?',(row[0], )).fetchone()[0],
+			"Dia":c2.execute('SELECT DIA FROM FUNCIONES where ID_FUNCION=?',(row[0], )).fetchone()[0],
+			"NombreEspectaculo":c2.execute('SELECT NOMBRE FROM ESPECTACULOS where ID_ESPECTACULO=(SELECT ID_ESPECTACULO from FUNCIONES where ID_FUNCION=?)',(row[0], )).fetchone()[0],
+			"NombreEmpresaEmisora":c2.execute('SELECT RAZON_SOCIAL FROM EMPRESAS_EMISORAS where CUIT=(SELECT CUIT_EMPRESA from FUNCIONES where ID_FUNCION=?)',(row[0], )).fetchone()[0],
+			"IdFuncion": row[0],
+			"Ubicacion": row[1],
+			"IdCliente":row[2],	
+			}
+			Entradas.append(funcion);
+		conn.close()
+		EntradasFinal={
+		"Entradas":Entradas
+		}
+		return EntradasFinal,200
+		
 
 class Intereses(Resource):
 	def post(self):
@@ -137,6 +160,7 @@ api.add_resource(Funciones, "/Funciones") #http://192.168.0.110:5000/Funciones?c
 api.add_resource(Espectaculos,"/Espectaculos") #Espectaculos por empresa	http://192.168.0.110:5000/Espectaculos?cuitEmp=30-69726350-7
 api.add_resource(Entradas,"/Entradas")
 api.add_resource(Intereses,"/Intereses")
+api.add_resource(InfoCompletaEntradas,"/InformacionCompleta/Entradas")#http://192.168.0.110:5000/InformacionCompleta/Entradas?IdCliente=1
 
 
 

@@ -29,6 +29,7 @@ public class Menu extends AppCompatActivity {
     }
     public void MisEntradasBottonAction(View view) {
         Intent intent = new Intent(this, MainActivity_MisEntradas.class);
+        intent.putExtra("IdCliente",this.cliente.GetId() );
         startActivity(intent);
     }
     public void CodigosPromocionalesBottonAction(View view) {
