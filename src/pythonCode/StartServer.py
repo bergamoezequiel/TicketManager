@@ -153,6 +153,28 @@ class Intereses(Resource):
 			c.execute('INSERT INTO INTERESES VALUES (?,?)',(request.json["IdCliente"],request.json["IdFuncion"]))
 			conn.commit()
 			return Entradas,200
+	def get(self):
+		Intereses=[]
+		conn = sqlite3.connect('TicketManager.db')
+		c = conn.cursor()
+		c2 = conn.cursor()
+		for row in c.execute('SELECT * FROM INTERESES where ID_Cliente=?',(request.args.get('IdCliente'), )):
+			interes = {
+			"CantidadDeEntradas":c2.execute('SELECT count(*) FROM ENTRADAS where ID_FUNCION=? and ID_CLIENTE="NO_ASIGNADA"',(row[1], )).fetchone()[0],
+			"IdFuncion": row[1],
+			"Hora":c2.execute('SELECT HORA FROM FUNCIONES where ID_FUNCION=?',(row[1], )).fetchone()[0],
+			"Dia":c2.execute('SELECT DIA FROM FUNCIONES where ID_FUNCION=?',(row[1], )).fetchone()[0],
+			"NombreEspectaculo":c2.execute('SELECT NOMBRE FROM ESPECTACULOS where ID_ESPECTACULO=(SELECT ID_ESPECTACULO from FUNCIONES where ID_FUNCION=?)',(row[1], )).fetchone()[0],
+			"NombreEmpresaEmisora":c2.execute('SELECT RAZON_SOCIAL FROM EMPRESAS_EMISORAS where CUIT=(SELECT CUIT_EMPRESA from FUNCIONES where ID_FUNCION=?)',(row[1], )).fetchone()[0],
+			
+			}
+			Intereses.append(interes);
+		conn.close()
+		InteresesFinal={
+		"Intereses":Intereses
+		}
+		return InteresesFinal,200
+	
 api.add_resource(Clientes, "/Clientes")
 api.add_resource(Cliente, "/Cliente/<string:name>")
 api.add_resource(EmpresasEmisoras, "/Empresas")
@@ -161,6 +183,7 @@ api.add_resource(Espectaculos,"/Espectaculos") #Espectaculos por empresa	http://
 api.add_resource(Entradas,"/Entradas")
 api.add_resource(Intereses,"/Intereses")
 api.add_resource(InfoCompletaEntradas,"/InformacionCompleta/Entradas")#http://192.168.0.110:5000/InformacionCompleta/Entradas?IdCliente=1
+
 
 
 

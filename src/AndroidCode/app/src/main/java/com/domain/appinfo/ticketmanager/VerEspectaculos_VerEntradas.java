@@ -84,12 +84,6 @@ public class VerEspectaculos_VerEntradas extends AppCompatActivity {
             jsonArr = response.getJSONArray("Entradas");
             Ubicaciones=new String[jsonArr.length()];
             if(jsonArr.length()<1){
-                Button boton = (Button) findViewById(R.id.button);
-                boton.setBackgroundColor(Color.GREEN);
-
-            }else{
-                Button boton = (Button) findViewById(R.id.button);
-                boton.setBackgroundColor(Color.GRAY);
 
 
             }

@@ -25,7 +25,8 @@
         <activity android:name=".MainActivity_Alertas" />
         <activity android:name=".VerEspectaculos_VerListadoDeEspectaculos" />
         <activity android:name=".VerEspectaculos_VerFunciones" />
-        <activity android:name=".VerEspectaculos_VerEntradas"></activity>
+        <activity android:name=".VerEspectaculos_VerEntradas" />
+        <activity android:name=".MisEntradas_VerEntrada"></activity>
     </application>
 
 </manifest>
