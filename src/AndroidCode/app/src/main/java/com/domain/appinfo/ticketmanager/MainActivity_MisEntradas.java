@@ -2,11 +2,13 @@ package com.domain.appinfo.ticketmanager;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -24,6 +26,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class MainActivity_MisEntradas extends AppCompatActivity {
+
+    private String[] NombresEspectaculos=new String[0];
+    private String[] NombreEmpresa=new String[0];
+    private String[] Horas=new String[0];
+    private String[] Dias= new String[0];
+    private String[] Ubicaciones = new String[0];
+    private String[] IdsEntradas=new String[0];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,16 +77,18 @@ public class MainActivity_MisEntradas extends AppCompatActivity {
         private final String[] Horas;
         private final String[] Dias;
         private final String[] Ubicaciones;
+        private final String[] IdsEntradas;
 
 
-        public MySimpleArrayAdapter(Context context,String[] NombreEspectaculos,String[] NombresEmpresa, String[] Horas, String[] Dias, String[] Ubicaciones) {
-            super(context, R.layout.rowlayout_espectaculos, NombreEspectaculos);
+        public MySimpleArrayAdapter(Context context,String[] NombreEspectaculos,String[] NombresEmpresa, String[] Horas, String[] Dias, String[] Ubicaciones, String[] IdsEntradas) {
+            super(context, R.layout.rowlayout_espectaculos, IdsEntradas);
             this.context = context;
             this.NombresEspectaculos= NombreEspectaculos;
             this.NombresEmpresa = NombresEmpresa;
             this.Horas=Horas;
             this.Dias=Dias;
             this.Ubicaciones=Ubicaciones;
+            this.IdsEntradas=IdsEntradas;
         }
 
         @Override
@@ -112,11 +123,7 @@ public class MainActivity_MisEntradas extends AppCompatActivity {
 
         JSONArray jsonArr;
         //Se arman dos listados, de nombres y descripciones para pasarselo al adaptador de la lista
-        String[] NombresEspectaculos=new String[0];
-        String[] NombreEmpresa=new String[0];
-        String[] Horas=new String[0];
-        String[] Dias= new String[0];
-        String[] Ubicaciones = new String[0];
+
         try {
             jsonArr = response.getJSONArray("Entradas");
             NombresEspectaculos=new String[jsonArr.length()];
@@ -124,6 +131,7 @@ public class MainActivity_MisEntradas extends AppCompatActivity {
             Horas=new String[jsonArr.length()];
             Dias=new String[jsonArr.length()];
             Ubicaciones=new String[jsonArr.length()];
+            IdsEntradas=new String[jsonArr.length()];
             for(int i=0;i<jsonArr.length();i++){
                 JSONObject jsonEspectaculo = jsonArr.getJSONObject(i);
                 NombresEspectaculos[i]=jsonEspectaculo.getString("NombreEspectaculo");
@@ -131,13 +139,31 @@ public class MainActivity_MisEntradas extends AppCompatActivity {
                 Horas[i]=jsonEspectaculo.getString("Hora");
                 Dias[i]=jsonEspectaculo.getString("Dia");
                 Ubicaciones[i]=jsonEspectaculo.getString("Ubicacion");
+                IdsEntradas[i]= jsonEspectaculo.getString("IdFuncion")+"-"+jsonEspectaculo.getString("Ubicacion")+"-"+jsonEspectaculo.getString("NombreEspectaculo")+"-"+jsonEspectaculo.getString("Hora")+"-"+jsonEspectaculo.getString("Dia");
 
 
             }
         }catch(Exception e){}
-        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, NombresEspectaculos ,NombreEmpresa,Horas,Dias,Ubicaciones);
+        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, NombresEspectaculos ,NombreEmpresa,Horas,Dias,Ubicaciones,IdsEntradas );
         final ListView listview = (ListView) findViewById(R.id.listView);
         listview.setAdapter(adapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // TextView text= (TextView) findViewById(R.id.textView);
+                // text.setText(parent.getItemAtPosition(position).toString());
+                VerEntrada(parent.getItemAtPosition(position).toString());
+            }
+        });
+
+
+    }
+
+    public void VerEntrada(String idEntrada){
+        Intent intent2 = new Intent(this, MisEntradas_VerEntrada.class);
+        intent2.putExtra("IdEntrada",idEntrada);
+        intent2.putExtra("IdCliente",getIntent().getStringExtra("IdCliente"));
+        startActivity(intent2);
 
     }
 }
