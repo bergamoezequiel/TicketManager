@@ -27,6 +27,7 @@
         android:text="@+id/label"
         android:textSize="50px"></TextView>
 
+
     <TextView
         android:id="@+id/FechaHora"
         android:layout_width="400dp"

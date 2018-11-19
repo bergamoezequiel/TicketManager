@@ -67,7 +67,7 @@ public class MainActivity_Alertas extends AppCompatActivity {
 
     private void RespuestaJSON(JSONObject response) {
         TextView text = (TextView) findViewById(R.id.textView);
-        text.setText(response.toString());
+       // text.setText(response.toString());
         JSONArray jsonArr;
         String[] NombresEspectaculos=new String[0];
         String[] NombreEmpresa=new String[0];

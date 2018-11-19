@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,7 +31,7 @@ import org.json.JSONObject;
 import static android.widget.Toast.LENGTH_LONG;
 
 public class VerEspectaculos_VerEntradas extends AppCompatActivity {
-
+    private boolean hayEntradas=true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +84,13 @@ public class VerEspectaculos_VerEntradas extends AppCompatActivity {
         try {
             jsonArr = response.getJSONArray("Entradas");
             Ubicaciones=new String[jsonArr.length()];
+            Button boton= findViewById(R.id.button);
             if(jsonArr.length()<1){
+                boton.setBackgroundColor(Color.GREEN);
+                hayEntradas=false;
+
+            }else{
+                boton.setBackgroundColor(Color.GRAY);
 
 
             }
@@ -143,12 +150,22 @@ public class VerEspectaculos_VerEntradas extends AppCompatActivity {
 
     public void GuardarInteresBottonAction(View view){
        JSONObject json= new JSONObject();
-       try {
-           json.put("IdCliente", getIntent().getStringExtra("IdCliente"));
-           json.put("IdFuncion", getIntent().getStringExtra("IdFuncion"));
-       }catch(Exception e){}
-        GuardarInteres(json);
 
+        if(!hayEntradas) {
+            try {
+                json.put("IdCliente", getIntent().getStringExtra("IdCliente"));
+                json.put("IdFuncion", getIntent().getStringExtra("IdFuncion"));
+            } catch (Exception e) {
+            }
+
+            GuardarInteres(json);
+            Toast.makeText(this,
+                    "Alerta Generada", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this,
+                    "Todavia hay entradas disponibles", Toast.LENGTH_SHORT).show();
+
+        }
 
 
     }
