@@ -54,7 +54,12 @@ c.execute('''CREATE TABLE INTERESES
 c.execute("INSERT INTO INTERESES VALUES ('1','1-FUNC')")
 c.execute("INSERT INTO INTERESES VALUES ('1','4-FUNC')")
 
+c.execute('''CREATE TABLE CODIGOS_PROMOCIONALES
+             (ID_FUNCION text, CODIGO_PROMOCIONAL text, DESCRIPCION text, ID_CLIENTE text)''')
 
+c.execute("INSERT INTO CODIGOS_PROMOCIONALES VALUES ('1-FUNC','Hjfs-46fD-SFh5','Entrada gratis','NO_ASIGNADA')")
+c.execute("INSERT INTO CODIGOS_PROMOCIONALES VALUES ('1-FUNC','Hjfs-46fD-SFh6','balde de pochoclos gratis','NO_ASIGNADA')")
+c.execute("INSERT INTO CODIGOS_PROMOCIONALES VALUES ('1-FUNC','Hjfs-46fD-SFh7','35% de descuento en mcDonalds','NO_ASIGNADA')")
 
 # Save (commit) the changes
 conn.commit()
