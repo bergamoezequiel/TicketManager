@@ -139,7 +139,7 @@ public class MainActivity_MisEntradas extends AppCompatActivity {
                 Horas[i]=jsonEspectaculo.getString("Hora");
                 Dias[i]=jsonEspectaculo.getString("Dia");
                 Ubicaciones[i]=jsonEspectaculo.getString("Ubicacion");
-                IdsEntradas[i]= jsonEspectaculo.getString("IdFuncion")+"-"+jsonEspectaculo.getString("Ubicacion")+"-"+jsonEspectaculo.getString("NombreEspectaculo")+"-"+jsonEspectaculo.getString("Hora")+"-"+jsonEspectaculo.getString("Dia");
+                IdsEntradas[i]= jsonEspectaculo.getString("IdFuncion")+","+jsonEspectaculo.getString("NombreEmpresaEmisora")+","+jsonEspectaculo.getString("NombreEspectaculo")+","+jsonEspectaculo.getString("Ubicacion")+","+jsonEspectaculo.getString("Hora")+","+jsonEspectaculo.getString("Dia");
 
 
             }
@@ -165,5 +165,11 @@ public class MainActivity_MisEntradas extends AppCompatActivity {
         intent2.putExtra("IdCliente",getIntent().getStringExtra("IdCliente"));
         startActivity(intent2);
 
+    }
+    public void onRestart() {
+        super.onRestart();
+        //When BACK BUTTON is pressed, the activity on the stack is restarted
+        //Do what you want on the refresh procedure here
+        ConsultarMisEntradas(getIntent().getStringExtra("IdCliente"));
     }
 }

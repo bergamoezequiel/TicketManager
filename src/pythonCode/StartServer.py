@@ -129,6 +129,14 @@ class CodigosPromocionales(Resource):
 
 		 
 class Entradas(Resource):
+	def delete(self):
+		Entradas={}
+		conn = sqlite3.connect('TicketManager.db')
+		c = conn.cursor()
+		c.execute('UPDATE ENTRADAS SET ID_CLIENTE="NO_ASIGNADA" WHERE (ID_FUNCION=? and UBICACION=?)',(request.args.get('IdFuncion'),request.args.get('Ubicacion'), ))
+		conn.commit()
+		return Entradas,200
+		
 	def get(self):
 		Entradas=[]
 		conn = sqlite3.connect('TicketManager.db')
