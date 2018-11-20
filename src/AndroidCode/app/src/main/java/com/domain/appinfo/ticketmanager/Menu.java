@@ -33,6 +33,9 @@ public class Menu extends AppCompatActivity {
         startActivity(intent);
     }
     public void CodigosPromocionalesBottonAction(View view) {
+        Intent intent = new Intent(this, MainActivity_MisCodigosPromocionales.class);
+        intent.putExtra("IdCliente",this.cliente.GetId() );
+        startActivity(intent);
 
     }
     public void AlertasBottonAction(View view) {

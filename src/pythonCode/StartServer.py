@@ -99,6 +99,23 @@ class Espectaculos(Resource):
 		}
 		return EspectaculosFinal,200
 		
+		
+class CodigosPromocionalesPorCliente(Resource):
+	def get(self,name):
+		Codigos=[]
+		conn = sqlite3.connect('TicketManager.db')
+		c = conn.cursor()
+		for row in c.execute('SELECT * FROM CODIGOS_PROMOCIONALES where ID_CLIENTE=?',(name,)):
+			codigo={
+				"CodigoPromocional": row[1],
+				"Descripcion": row[2],
+				}
+			Codigos.append(codigo)
+		conn.close()
+		CodigosFinal={
+		"CodigosPromocionales":Codigos
+		}
+		return CodigosFinal,200
 class CodigosPromocionales(Resource):
 	def post(self):
 		Entradas={}
@@ -220,6 +237,7 @@ api.add_resource(Entradas,"/Entradas")
 api.add_resource(Intereses,"/Intereses")
 api.add_resource(InfoCompletaEntradas,"/InformacionCompleta/Entradas")#http://192.168.0.110:5000/InformacionCompleta/Entradas?IdCliente=1
 api.add_resource(CodigosPromocionales,"/CodigosPromocionales")
+api.add_resource(CodigosPromocionalesPorCliente,"/<string:name>/CodigosPromocionales")
 
 
 
