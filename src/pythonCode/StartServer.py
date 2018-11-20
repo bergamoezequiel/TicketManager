@@ -158,7 +158,7 @@ class Entradas(Resource):
 		Entradas=[]
 		conn = sqlite3.connect('TicketManager.db')
 		c = conn.cursor()
-		for row in c.execute('SELECT * FROM Entradas where ID_FUNCION=?',(request.args.get('IdFuncion'), )):
+		for row in c.execute('SELECT * FROM Entradas where ID_FUNCION=? and ID_CLIENTE="NO_ASIGNADA"',(request.args.get('IdFuncion'), )):
 			funcion = {
 			"IdFuncion": row[0],
 			"Ubicacion": row[1],
