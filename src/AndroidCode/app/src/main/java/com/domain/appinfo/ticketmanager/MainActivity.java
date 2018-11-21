@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             editText.setTextColor(Color.RED);
             editText.setText("usuario invalido");
+            editText.setVisibility(View.VISIBLE);
         }
     }
 
