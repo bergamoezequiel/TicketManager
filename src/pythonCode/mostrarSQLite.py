@@ -19,3 +19,5 @@ for row in c.execute('SELECT * FROM ENTRADAS'):
 print("-----------INTERESES-----------")
 for row in c.execute('SELECT * FROM INTERESES'):
         print (row)
+for row in c.execute('SELECT * FROM CODIGOS_PROMOCIONALES'):
+        print (row)

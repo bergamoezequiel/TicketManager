@@ -4,7 +4,7 @@ from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
 
 app = Flask(__name__)
-app.config['SERVER_NAME'] = '192.168.0.110:5000'
+app.config['SERVER_NAME'] = '192.168.0.104:5000'
 api = Api(app)
 
 
@@ -98,14 +98,67 @@ class Espectaculos(Resource):
 		"Espectaculos":Espectaculos
 		}
 		return EspectaculosFinal,200
+		
+		
+class CodigosPromocionalesPorCliente(Resource):
+	def get(self,name):
+		Codigos=[]
+		conn = sqlite3.connect('TicketManager.db')
+		c = conn.cursor()
+		for row in c.execute('SELECT * FROM CODIGOS_PROMOCIONALES where ID_CLIENTE=?',(name,)):
+			codigo={
+				"CodigoPromocional": row[1],
+				"Descripcion": row[2],
+				}
+			Codigos.append(codigo)
+		conn.close()
+		CodigosFinal={
+		"CodigosPromocionales":Codigos
+		}
+		return CodigosFinal,200
+class CodigosPromocionales(Resource):
+	def post(self):
+		Entradas={}
+		conn = sqlite3.connect('TicketManager.db')
+		c = conn.cursor()
+		print(request.json)
+		#print(request.json["DNI"])
+		c.execute('UPDATE CODIGOS_PROMOCIONALES SET ID_CLIENTE=? WHERE CODIGO_PROMOCIONAL=?',(request.json["IdCliente"],request.json["CodProm"]))
+		conn.commit()
+		return Entradas,200
+	def get(self):
+		Codigos=[]
+		conn = sqlite3.connect('TicketManager.db')
+		c = conn.cursor()
+		c2 = conn.cursor()
+		for row in c.execute('SELECT * FROM CODIGOS_PROMOCIONALES where ID_CLIENTE="NO_ASIGNADA" and ID_FUNCION=?',(request.args.get('IdFuncion'), )):
+				Codigo = {
+				"CodigoPromocional": row[1],
+				"Descripcion": row[2],
+				
+				}
+				Codigos.append(Codigo);
+		conn.close()
+		CodigosFinal={
+		"CodigosPromocionales":Codigos
+		}
+		return CodigosFinal,200
 
 		 
 class Entradas(Resource):
+	def delete(self):
+		Entradas={}
+		conn = sqlite3.connect('TicketManager.db')
+		c = conn.cursor()
+		c.execute('UPDATE ENTRADAS SET ID_CLIENTE="NO_ASIGNADA" WHERE (ID_FUNCION=? and UBICACION=?)',(request.args.get('IdFuncion'),request.args.get('Ubicacion'), ))
+		conn.commit()
+		return Entradas,200
+		
 	def get(self):
 		Entradas=[]
 		conn = sqlite3.connect('TicketManager.db')
 		c = conn.cursor()
-		for row in c.execute('SELECT * FROM Entradas where ID_FUNCION=?',(request.args.get('IdFuncion'), )):
+		for row in c.execute('SELECT * FROM Entradas where ID_FUNCION=? and ID_CLIENTE="NO_ASIGNADA"',(request.args.get('IdFuncion'), )):
 			funcion = {
 			"IdFuncion": row[0],
 			"Ubicacion": row[1],
@@ -183,6 +236,9 @@ api.add_resource(Espectaculos,"/Espectaculos") #Espectaculos por empresa	http://
 api.add_resource(Entradas,"/Entradas")
 api.add_resource(Intereses,"/Intereses")
 api.add_resource(InfoCompletaEntradas,"/InformacionCompleta/Entradas")#http://192.168.0.110:5000/InformacionCompleta/Entradas?IdCliente=1
+api.add_resource(CodigosPromocionales,"/CodigosPromocionales")
+api.add_resource(CodigosPromocionalesPorCliente,"/<string:name>/CodigosPromocionales")
+
 
 
 
