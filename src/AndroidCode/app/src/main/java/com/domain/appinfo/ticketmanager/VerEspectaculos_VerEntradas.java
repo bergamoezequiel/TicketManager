@@ -159,8 +159,7 @@ public class VerEspectaculos_VerEntradas extends AppCompatActivity {
             }
 
             GuardarInteres(json);
-            Toast.makeText(this,
-                    "Alerta Generada", Toast.LENGTH_SHORT).show();
+
         }else{
             Toast.makeText(this,
                     "Todavia hay entradas disponibles", Toast.LENGTH_SHORT).show();
@@ -192,6 +191,7 @@ public class VerEspectaculos_VerEntradas extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
+
             }
         });
 
@@ -201,7 +201,17 @@ public class VerEspectaculos_VerEntradas extends AppCompatActivity {
 
     }
     private void RespuestaJSON2(JSONObject response) {
+        try {
+            String str = response.getString("error");
+            Toast.makeText(this,
+                    "Alerta generada previamente", Toast.LENGTH_SHORT).show();
 
+        }catch(Exception e){
+
+            Toast.makeText(this,
+                    "Alerta Generada", Toast.LENGTH_SHORT).show();
+        }
     }
+
 
 }
