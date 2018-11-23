@@ -24,12 +24,12 @@ public class Menu extends AppCompatActivity {
 
     public void VerEspectaculosBottonAction(View view) {
         Intent intent = new Intent(this, MainActivity_VerEspectaculos.class);
-        intent.putExtra("IdCliente",this.cliente.GetId() );
+        intent.putExtra("IdCliente",this.cliente.GetJsonString() );
         startActivity(intent);
     }
     public void MisEntradasBottonAction(View view) {
         Intent intent = new Intent(this, MainActivity_MisEntradas.class);
-        intent.putExtra("IdCliente",this.cliente.GetId() );
+        intent.putExtra("IdCliente",this.cliente.GetJsonString() );
         startActivity(intent);
     }
     public void CodigosPromocionalesBottonAction(View view) {

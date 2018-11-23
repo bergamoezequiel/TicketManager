@@ -4,7 +4,7 @@ from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
 
 app = Flask(__name__)
-app.config['SERVER_NAME'] = '192.168.0.104:5000'
+app.config['SERVER_NAME'] = '192.168.43.147:5000'
 api = Api(app)
 
 
@@ -202,6 +202,9 @@ class Intereses(Resource):
 			conn = sqlite3.connect('TicketManager.db')
 			c = conn.cursor()
 			print(request)
+			print("antesJSON")
+			print(request.json)
+			print("Despues")
 			#print(request.json["DNI"])
 			if c.execute('SELECT count(*) FROM INTERESES where ID_CLIENTE=? and ID_FUNCION=?',(request.json["IdCliente"],request.json["IdFuncion"], )).fetchone()[0]>0:
 				Entradas={"error":1}

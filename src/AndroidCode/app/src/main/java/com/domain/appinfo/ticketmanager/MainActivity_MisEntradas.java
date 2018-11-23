@@ -20,6 +20,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Cliente;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Entrada;
 import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.UrlBackend;
 
 import org.json.JSONArray;
@@ -33,61 +35,51 @@ public class MainActivity_MisEntradas extends AppCompatActivity {
     private String[] Dias= new String[0];
     private String[] Ubicaciones = new String[0];
     private String[] IdsEntradas=new String[0];
+    Entrada[] entradas=new Entrada[0];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main__mis_entradas);
-        ConsultarMisEntradas(getIntent().getStringExtra("IdCliente"));
+        ConsultarMisEntradas();
+
     }
 
-    private void ConsultarMisEntradas(String IdCliente){
-        String tag_json_obj = "json_obj_req";
-        final ProgressDialog pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Loading...");
-        pDialog.show();
-        String url =UrlBackend.URL+"/InformacionCompleta/Entradas?IdCliente="+IdCliente;
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                url, null,
-                new Response.Listener<JSONObject>() {
+    public void ConsultarMisEntradas(){
+        JSONObject clienteJSON= new JSONObject();
+        try {
+            clienteJSON = new JSONObject(getIntent().getStringExtra("IdCliente"));
+        }catch (Exception e){}
+        Cliente cliente= new Cliente(clienteJSON);
+       entradas = cliente.GetEntradas();
+        String[]  IdsEntradas= new String[entradas.length];
+        for(int i=0;i<entradas.length;i++) {
+            IdsEntradas[i]=entradas[i].IdFuncion+entradas[i].NombreEmpresa+entradas[i].NombreEspectaculo+entradas[i].Ubicacion+entradas[i].Hora+entradas[i].Fecha;
+        }
+        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this,entradas,IdsEntradas );
+        final ListView listview = (ListView) findViewById(R.id.listView);
+        listview.setAdapter(adapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        pDialog.hide();
-                        RespuestaJSON(response);
-
-                    }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // TextView text= (TextView) findViewById(R.id.textView);
+                // text.setText(parent.getItemAtPosition(position).toString());
+                VerEntrada(position);
             }
         });
 
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        requestQueue.add(jsonObjReq);
-
 
     }
-
     public class MySimpleArrayAdapter extends ArrayAdapter<String> {
         private final Context context;
-        private final String[] NombresEspectaculos;
-        private final String[] NombresEmpresa;
-        private final String[] Horas;
-        private final String[] Dias;
-        private final String[] Ubicaciones;
+        private final Entrada[] entradas;
         private final String[] IdsEntradas;
 
 
-        public MySimpleArrayAdapter(Context context,String[] NombreEspectaculos,String[] NombresEmpresa, String[] Horas, String[] Dias, String[] Ubicaciones, String[] IdsEntradas) {
+        public MySimpleArrayAdapter(Context context,Entrada[] entradas, String[] IdsEntradas) {
             super(context, R.layout.rowlayout_espectaculos, IdsEntradas);
             this.context = context;
-            this.NombresEspectaculos= NombreEspectaculos;
-            this.NombresEmpresa = NombresEmpresa;
-            this.Horas=Horas;
-            this.Dias=Dias;
-            this.Ubicaciones=Ubicaciones;
+            this.entradas=entradas;
             this.IdsEntradas=IdsEntradas;
         }
 
@@ -101,12 +93,12 @@ public class MainActivity_MisEntradas extends AppCompatActivity {
             TextView textView3 = (TextView) rowView.findViewById(R.id.FechaHora);
 
 
-            textView.setText(NombresEspectaculos[position]);
-            textView2.setText(NombresEmpresa[position]);
-            textView3.setText(Dias[position]+ "  "+Horas[position]+"  "+Ubicaciones[position]);
+            textView.setText(entradas[position].NombreEspectaculo);
+            textView2.setText(entradas[position].NombreEmpresa);
+            textView3.setText(entradas[position].Fecha+ "  "+entradas[position].Hora+"  "+entradas[position].Ubicacion);
 
             // Change the icon for Windows and iPhone
-            String s = NombresEspectaculos[position];
+            //String s = NombresEspectaculos[position];
 
 
 
@@ -117,51 +109,11 @@ public class MainActivity_MisEntradas extends AppCompatActivity {
 
 
 
-    private void RespuestaJSON(JSONObject response) {
-        TextView text = (TextView) findViewById(R.id.textView);
-        text.setText(response.toString());
-
-        JSONArray jsonArr;
-        //Se arman dos listados, de nombres y descripciones para pasarselo al adaptador de la lista
-
-        try {
-            jsonArr = response.getJSONArray("Entradas");
-            NombresEspectaculos=new String[jsonArr.length()];
-            NombreEmpresa=new String[jsonArr.length()];
-            Horas=new String[jsonArr.length()];
-            Dias=new String[jsonArr.length()];
-            Ubicaciones=new String[jsonArr.length()];
-            IdsEntradas=new String[jsonArr.length()];
-            for(int i=0;i<jsonArr.length();i++){
-                JSONObject jsonEspectaculo = jsonArr.getJSONObject(i);
-                NombresEspectaculos[i]=jsonEspectaculo.getString("NombreEspectaculo");
-                NombreEmpresa[i]=jsonEspectaculo.getString("NombreEmpresaEmisora");
-                Horas[i]=jsonEspectaculo.getString("Hora");
-                Dias[i]=jsonEspectaculo.getString("Dia");
-                Ubicaciones[i]=jsonEspectaculo.getString("Ubicacion");
-                IdsEntradas[i]= jsonEspectaculo.getString("IdFuncion")+","+jsonEspectaculo.getString("NombreEmpresaEmisora")+","+jsonEspectaculo.getString("NombreEspectaculo")+","+jsonEspectaculo.getString("Ubicacion")+","+jsonEspectaculo.getString("Hora")+","+jsonEspectaculo.getString("Dia");
 
 
-            }
-        }catch(Exception e){}
-        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, NombresEspectaculos ,NombreEmpresa,Horas,Dias,Ubicaciones,IdsEntradas );
-        final ListView listview = (ListView) findViewById(R.id.listView);
-        listview.setAdapter(adapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // TextView text= (TextView) findViewById(R.id.textView);
-                // text.setText(parent.getItemAtPosition(position).toString());
-                VerEntrada(parent.getItemAtPosition(position).toString());
-            }
-        });
-
-
-    }
-
-    public void VerEntrada(String idEntrada){
+    public void VerEntrada(int position){
         Intent intent2 = new Intent(this, MisEntradas_VerEntrada.class);
-        intent2.putExtra("IdEntrada",idEntrada);
+        intent2.putExtra("Entrada",entradas[position].getJsonFullInfo());
         intent2.putExtra("IdCliente",getIntent().getStringExtra("IdCliente"));
         startActivity(intent2);
 
@@ -170,6 +122,6 @@ public class MainActivity_MisEntradas extends AppCompatActivity {
         super.onRestart();
         //When BACK BUTTON is pressed, the activity on the stack is restarted
         //Do what you want on the refresh procedure here
-        ConsultarMisEntradas(getIntent().getStringExtra("IdCliente"));
+        ConsultarMisEntradas();
     }
 }

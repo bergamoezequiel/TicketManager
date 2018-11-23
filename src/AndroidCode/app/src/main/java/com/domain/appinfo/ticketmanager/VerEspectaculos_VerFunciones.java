@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Espectaculo;
 import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Funcion;
 import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.GetRestAPIDAO;
 import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.UrlBackend;
@@ -28,38 +30,29 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class VerEspectaculos_VerFunciones extends AppCompatActivity {
-
+    public Funcion[] Funciones;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ver_espectaculos__ver_funciones);
         TextView text = (TextView) findViewById(R.id.textView);
         //ConsultarFuncionesPorEmpresaYEspectaculo(getIntent().getStringExtra("cuitEmpresa"),getIntent().getStringExtra("IdEspectaculo"));
-        String cuitEmpresa= getIntent().getStringExtra("cuitEmpresa");
-        String IdEspectaculo=getIntent().getStringExtra("IdEspectaculo");
-        JSONArray jsonArr;
-        //Se arman dos listados, de nombres y descripciones para pasarselo al adaptador de la lista
-        String[] IdsDeFuncion=new String[0];
-        Funcion[] Funciones=new Funcion[0];
 
-        try {
-            GetRestAPIDAO getFunciones= new GetRestAPIDAO();
-            String jsonFunciones =  getFunciones.execute(UrlBackend.URL+"/Funciones?cuitEmp="+cuitEmpresa+"&"+"IdEspectaculo="+IdEspectaculo).get();
-            JSONObject jsonObj = new JSONObject(jsonFunciones);
-            jsonArr = jsonObj.getJSONArray("Funciones");
-            IdsDeFuncion=new String[jsonArr.length()];
-            Funciones=new Funcion[jsonArr.length()];
-
-            for(int i=0;i<jsonArr.length();i++){
-                Funciones[i] = new Funcion(jsonArr.getJSONObject(i));
-                IdsDeFuncion[i]=Funciones[i].getId();
-
-
-
-            }
+        JSONObject js= new JSONObject();
+        try{
+            js=new JSONObject(getIntent().getStringExtra("espectaculo"));
         }catch(Exception e){}
+        Espectaculo espectaculo= new Espectaculo(js);
+        Funciones=espectaculo.GetFuncionesDisponibles(getIntent().getStringExtra("cuitEmpresa"));
+        String[] IdsFuncion=new String[Funciones.length];
+        String IdEspectaculo=getIntent().getStringExtra("IdEspectaculo");
+        for(int i=0;i<Funciones.length;i++){
 
-        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, IdsDeFuncion ,Funciones);
+                IdsFuncion[i]=Funciones[i].getId();
+        }
+
+
+        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, IdsFuncion ,Funciones);
         final ListView listview = (ListView) findViewById(R.id.listView);
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -67,15 +60,15 @@ public class VerEspectaculos_VerFunciones extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // TextView text= (TextView) findViewById(R.id.textView);
                 // text.setText(parent.getItemAtPosition(position).toString());
-                iniciarVerEntradas(parent.getItemAtPosition(position).toString());
+                iniciarVerEntradas(position);
             }
         });
 
     }
 
-    public void iniciarVerEntradas(String funcion){
+    public void iniciarVerEntradas(int pos){
         Intent intent2 = new Intent(this, VerEspectaculos_VerEntradas.class);
-        intent2.putExtra("IdFuncion",funcion);
+        intent2.putExtra("Funcion",Funciones[pos].getJsonString());
         //intent2.putExtra("IdEspectaculo",idEspectaculo);
         intent2.putExtra("IdCliente",getIntent().getStringExtra("IdCliente"));
         startActivity(intent2);

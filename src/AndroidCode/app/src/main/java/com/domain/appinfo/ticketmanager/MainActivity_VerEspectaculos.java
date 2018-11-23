@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class MainActivity_VerEspectaculos extends AppCompatActivity {
-
+    EmpresaEmisora[] empresasEmisoras;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +48,7 @@ public class MainActivity_VerEspectaculos extends AppCompatActivity {
             jsonArr= jsonObj.getJSONArray("Empresas");
             String[] RazonesSociales=new String[jsonArr.length()];
             String[] Cuits=new String[jsonArr.length()];
-            EmpresaEmisora[] empresasEmisoras= new EmpresaEmisora[jsonArr.length()];
+            empresasEmisoras= new EmpresaEmisora[jsonArr.length()];
             for(int i=0;i<jsonArr.length();i++) {
                 empresasEmisoras[i]= new EmpresaEmisora(jsonArr.getJSONObject(i));
                 RazonesSociales[i]=empresasEmisoras[i].RazonSocial;
@@ -62,7 +62,7 @@ public class MainActivity_VerEspectaculos extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     // TextView text= (TextView) findViewById(R.id.textView);
                     // text.setText(parent.getItemAtPosition(position).toString());
-                    iniciarVerListadoDeEspectaculos(parent.getItemAtPosition(position).toString());
+                    iniciarVerListadoDeEspectaculos(empresasEmisoras[position]);
                 }
             });
 
@@ -73,9 +73,9 @@ public class MainActivity_VerEspectaculos extends AppCompatActivity {
 
 
 
-    public void iniciarVerListadoDeEspectaculos(String cuit){
+    public void iniciarVerListadoDeEspectaculos(EmpresaEmisora emp){
         Intent intent2 = new Intent(this, VerEspectaculos_VerListadoDeEspectaculos.class);
-        intent2.putExtra("cuitEmpresa",cuit);
+        intent2.putExtra("empresa",emp.getJsonString());
         intent2.putExtra("IdCliente",getIntent().getStringExtra("IdCliente"));
 
         startActivity(intent2);

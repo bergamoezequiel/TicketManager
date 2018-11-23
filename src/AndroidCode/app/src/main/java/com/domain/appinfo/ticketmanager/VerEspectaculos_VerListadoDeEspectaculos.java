@@ -21,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.EmpresaEmisora;
 import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Espectaculo;
 import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.GetRestAPIDAO;
 import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.UrlBackend;
@@ -29,30 +30,32 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class VerEspectaculos_VerListadoDeEspectaculos extends AppCompatActivity {
-
+    Espectaculo[] espectaculos;
+    EmpresaEmisora emp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ver_espectaculos__ver_listado_de_espectaculos);
         //ConsultarEspectaculosPorEmpresa(getIntent().getStringExtra("cuitEmpresa"));
-        GetRestAPIDAO getEspectaculos= new GetRestAPIDAO();
-        String[] IdsDeEspectaculos=new String[0];
-        Espectaculo[] espectaculos=new Espectaculo[0];
-        try {
-            String jsonEspectaculos = getEspectaculos.execute(UrlBackend.URL + "/Espectaculos?cuitEmp=" + getIntent().getStringExtra("cuitEmpresa")).get();
-            JSONObject jsonObj = new JSONObject(jsonEspectaculos);
-            
-            JSONArray jsonArr;
-            jsonArr = jsonObj.getJSONArray("Espectaculos");
-            IdsDeEspectaculos=new String[jsonArr.length()];
-            espectaculos=new Espectaculo[jsonArr.length()];
-            for(int i=0;i<jsonArr.length();i++){
-                espectaculos[i] =new Espectaculo(jsonArr.getJSONObject(i));
-                IdsDeEspectaculos[i]=espectaculos[i].getId();
+        JSONObject js= new JSONObject();
+        try{
+            js=new JSONObject(getIntent().getStringExtra("empresa"));
+        }
+        catch(Exception e){}
+        emp = new EmpresaEmisora(js);
+
+        espectaculos= emp.GetEspectaculosDisponibles();
+        String[] IdsDeEspectaculos = new String[espectaculos.length];
 
 
-            }
-        }catch(Exception e){}
+        for (int i = 0; i < espectaculos.length; i++) {
+            IdsDeEspectaculos[i] = espectaculos[i].getId();
+
+
+        }
+
+
+
         MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, IdsDeEspectaculos ,espectaculos);
         final ListView listview = (ListView) findViewById(R.id.listView);
         listview.setAdapter(adapter);
@@ -61,16 +64,16 @@ public class VerEspectaculos_VerListadoDeEspectaculos extends AppCompatActivity 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // TextView text= (TextView) findViewById(R.id.textView);
                 // text.setText(parent.getItemAtPosition(position).toString());
-                iniciarVerFunciones(getIntent().getStringExtra("cuitEmpresa"),parent.getItemAtPosition(position).toString());
+                iniciarVerFunciones(getIntent().getStringExtra("cuitEmpresa"),position);
             }
         });
 
     }
 
-    public void iniciarVerFunciones(String cuit,String idEspectaculo){
+    public void iniciarVerFunciones(String cuit,int position){
         Intent intent2 = new Intent(this, VerEspectaculos_VerFunciones.class);
-        intent2.putExtra("cuitEmpresa",cuit);
-        intent2.putExtra("IdEspectaculo",idEspectaculo);
+        intent2.putExtra("cuitEmpresa",emp.CUIT);
+        intent2.putExtra("espectaculo",espectaculos[position].jsonString);
         intent2.putExtra("IdCliente",getIntent().getStringExtra("IdCliente"));
 
         startActivity(intent2);
