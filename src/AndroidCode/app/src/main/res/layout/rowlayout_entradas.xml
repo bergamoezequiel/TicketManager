@@ -1,18 +1,14 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/Ubic"
-        android:layout_width="100dp"
-        android:layout_height="55dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@+id/icon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAlignment="center"
         android:text="@+id/label"
-        android:textSize="50px"/>
+        android:textSize="20dp"/>
 </LinearLayout>

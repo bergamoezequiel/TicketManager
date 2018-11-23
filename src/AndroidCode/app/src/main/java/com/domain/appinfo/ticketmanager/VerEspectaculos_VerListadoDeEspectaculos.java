@@ -69,7 +69,6 @@ public class VerEspectaculos_VerListadoDeEspectaculos extends AppCompatActivity 
 
     private void RespuestaJSON(JSONObject response) {
         TextView text = (TextView) findViewById(R.id.textView);
-        text.setText(response.toString());
         JSONArray jsonArr;
         //Se arman dos listados, de nombres y descripciones para pasarselo al adaptador de la lista
         String[] IdsDeEspectaculos=new String[0];
@@ -133,20 +132,18 @@ public class VerEspectaculos_VerListadoDeEspectaculos extends AppCompatActivity 
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = inflater.inflate(R.layout.rowlayout_empresas_emisoras, parent, false);
+            View rowView = inflater.inflate(R.layout.rowlayout_espectaculos, parent, false);
             TextView textView = (TextView) rowView.findViewById(R.id.label);
             TextView textView2 = (TextView) rowView.findViewById(R.id.label2);
-            TextView textView3 = (TextView) rowView.findViewById(R.id.label3);
             ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
 
             textView.setText(NombresEspectaculos[position]);
             textView2.setText(DescripcionesEspectaculos[position]);
-            textView3.setText("modific esto");
 
             // Change the icon for Windows and iPhone
             String s = NombresEspectaculos[position];
 
-            imageView.setImageResource(R.drawable.superman);
+            imageView.setImageResource(R.drawable.popcorn);
 
 
             return rowView;

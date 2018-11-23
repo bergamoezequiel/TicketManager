@@ -32,7 +32,6 @@ public class VerEspectaculos_VerFunciones extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ver_espectaculos__ver_funciones);
         TextView text = (TextView) findViewById(R.id.textView);
-        text.setText("hola "+getIntent().getStringExtra("IdEspectaculo")+" "+getIntent().getStringExtra("cuitEmpresa"));
         ConsultarFuncionesPorEmpresaYEspectaculo(getIntent().getStringExtra("cuitEmpresa"),getIntent().getStringExtra("IdEspectaculo"));
     }
 
@@ -71,7 +70,6 @@ public class VerEspectaculos_VerFunciones extends AppCompatActivity {
 
     private void RespuestaJSON(JSONObject response) {
         TextView text = (TextView) findViewById(R.id.textView);
-        text.setText(response.toString());
         JSONArray jsonArr;
         //Se arman dos listados, de nombres y descripciones para pasarselo al adaptador de la lista
         String[] IdsDeFuncion=new String[0];
@@ -124,7 +122,7 @@ public class VerEspectaculos_VerFunciones extends AppCompatActivity {
         private final String[] Dias;
 
         public MySimpleArrayAdapter(Context context,String[] IdsDeFuncion,String[] Horas, String[] Dias) {
-            super(context, R.layout.rowlayout_espectaculos, IdsDeFuncion);
+            super(context, R.layout.rowlayout_funciones, IdsDeFuncion);
             this.context = context;
             this.IdsDeFuncion= IdsDeFuncion;
             this.Horas = Horas;

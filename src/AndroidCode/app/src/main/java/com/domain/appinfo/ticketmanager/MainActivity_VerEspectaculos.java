@@ -66,7 +66,6 @@ public class MainActivity_VerEspectaculos extends AppCompatActivity {
 
 
     private void RespuestaJSON(JSONObject response) {
-        TextView text= (TextView) findViewById(R.id.textView);
         JSONArray jsonArr;
         String[] RazonesSociales=new String[0];
         String[] Cuits=new String[0];
@@ -80,11 +79,6 @@ public class MainActivity_VerEspectaculos extends AppCompatActivity {
                 Cuits[i]=jsonEmpresa.getString("CUIT");
 
             }
-        }catch(Exception e){}
-
-        try {
-            text.setText(String.valueOf(response.getString("Empresas")));
-
         }catch(Exception e){}
 
         MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, RazonesSociales,Cuits);
@@ -130,18 +124,14 @@ public class MainActivity_VerEspectaculos extends AppCompatActivity {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View rowView = inflater.inflate(R.layout.rowlayout_empresas_emisoras, parent, false);
             TextView textView = (TextView) rowView.findViewById(R.id.label);
-            TextView textView2 = (TextView) rowView.findViewById(R.id.label2);
-            TextView textView3 = (TextView) rowView.findViewById(R.id.label3);
             ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
 
             textView.setText(razonesSociales[position]);
-            textView2.setText(cuits[position]);
-            textView3.setText("modific esto");
 
             // Change the icon for Windows and iPhone
             String s = razonesSociales[position];
 
-            imageView.setImageResource(R.drawable.superman);
+            imageView.setImageResource(R.drawable.popcorn);
 
 
             return rowView;

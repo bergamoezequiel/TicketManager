@@ -37,7 +37,6 @@ public class VerEspectaculos_VerEntradas extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ver_espectaculos__ver_entradas);
         TextView text = (TextView) findViewById(R.id.textView);
-        text.setText(getIntent().getStringExtra("IdFuncion")+getIntent().getStringExtra("IdCliente"));
         ConsultarUbicaciones(getIntent().getStringExtra("IdFuncion"));
     }
 
@@ -86,11 +85,11 @@ public class VerEspectaculos_VerEntradas extends AppCompatActivity {
             Ubicaciones=new String[jsonArr.length()];
             Button boton= findViewById(R.id.button);
             if(jsonArr.length()<1){
-                boton.setBackgroundColor(Color.GREEN);
+                boton.setVisibility(View.VISIBLE);
                 hayEntradas=false;
 
             }else{
-                boton.setBackgroundColor(Color.GRAY);
+                boton.setVisibility(View.GONE);
 
 
             }
