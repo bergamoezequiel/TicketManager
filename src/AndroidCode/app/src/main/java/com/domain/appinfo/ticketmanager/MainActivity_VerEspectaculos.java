@@ -20,10 +20,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.EmpresaEmisora;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.GetRestAPIDAO;
 import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.UrlBackend;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public class MainActivity_VerEspectaculos extends AppCompatActivity {
 
@@ -31,68 +39,39 @@ public class MainActivity_VerEspectaculos extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main__ver_espectaculos);
-        ConsultarEmpresasEmisoras();
-    }
-
-    private void ConsultarEmpresasEmisoras(){
-        String tag_json_obj = "json_obj_req";
-        final ProgressDialog pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Loading...");
-        pDialog.show();
-        String url =UrlBackend.URL+"/Empresas";
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                url, null,
-                new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        pDialog.hide();
-                        RespuestaJSON(response);
-
-                    }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        requestQueue.add(jsonObjReq);
-
-
-    }
-
-
-
-    private void RespuestaJSON(JSONObject response) {
-        JSONArray jsonArr;
-        String[] RazonesSociales=new String[0];
-        String[] Cuits=new String[0];
+        //ConsultarEmpresasEmisoras();
+        GetRestAPIDAO getEmpresasEmisoras= new GetRestAPIDAO();
         try {
-            jsonArr = response.getJSONArray("Empresas");
-            RazonesSociales=new String[jsonArr.length()];
-            Cuits=new String[jsonArr.length()];
-            for(int i=0;i<jsonArr.length();i++){
-                JSONObject jsonEmpresa = jsonArr.getJSONObject(i);
-                RazonesSociales[i]=jsonEmpresa.getString("RazonSocial");
-                Cuits[i]=jsonEmpresa.getString("CUIT");
-
+            String jsonEmpresasEmisoras = getEmpresasEmisoras.execute(UrlBackend.URL + "/Empresas").get();
+            JSONObject jsonObj=new JSONObject(jsonEmpresasEmisoras);
+            JSONArray jsonArr;
+            jsonArr= jsonObj.getJSONArray("Empresas");
+            String[] RazonesSociales=new String[jsonArr.length()];
+            String[] Cuits=new String[jsonArr.length()];
+            EmpresaEmisora[] empresasEmisoras= new EmpresaEmisora[jsonArr.length()];
+            for(int i=0;i<jsonArr.length();i++) {
+                empresasEmisoras[i]= new EmpresaEmisora(jsonArr.getJSONObject(i));
+                RazonesSociales[i]=empresasEmisoras[i].RazonSocial;
+                Cuits[i]=empresasEmisoras[i].CUIT;
             }
+            MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, RazonesSociales,Cuits);
+            final ListView listview = (ListView) findViewById(R.id.listView);
+            listview.setAdapter(adapter);
+            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    // TextView text= (TextView) findViewById(R.id.textView);
+                    // text.setText(parent.getItemAtPosition(position).toString());
+                    iniciarVerListadoDeEspectaculos(parent.getItemAtPosition(position).toString());
+                }
+            });
+
         }catch(Exception e){}
 
-        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, RazonesSociales,Cuits);
-        final ListView listview = (ListView) findViewById(R.id.listView);
-        listview.setAdapter(adapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               // TextView text= (TextView) findViewById(R.id.textView);
-               // text.setText(parent.getItemAtPosition(position).toString());
-                iniciarVerListadoDeEspectaculos(parent.getItemAtPosition(position).toString());
-            }
-        });
     }
+
+
+
 
     public void iniciarVerListadoDeEspectaculos(String cuit){
         Intent intent2 = new Intent(this, VerEspectaculos_VerListadoDeEspectaculos.class);

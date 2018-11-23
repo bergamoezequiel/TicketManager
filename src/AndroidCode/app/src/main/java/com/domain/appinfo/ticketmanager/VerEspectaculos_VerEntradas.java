@@ -23,6 +23,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Entrada;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.GetRestAPIDAO;
 import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.UrlBackend;
 
 import org.json.JSONArray;
@@ -37,7 +39,38 @@ public class VerEspectaculos_VerEntradas extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ver_espectaculos__ver_entradas);
         TextView text = (TextView) findViewById(R.id.textView);
-        ConsultarUbicaciones(getIntent().getStringExtra("IdFuncion"));
+        GetRestAPIDAO getEntradas = new GetRestAPIDAO();
+        String[] Ubicaciones=new String[0];
+        Entrada[] entradas= new Entrada[0];
+        try {
+            String jsongetEntradas = getEntradas.execute(UrlBackend.URL + "/Entradas?IdFuncion=" + getIntent().getStringExtra("IdFuncion")).get();
+            //ConsultarUbicaciones(getIntent().getStringExtra("IdFuncion"));
+
+
+            JSONObject jsonObj = new JSONObject(jsongetEntradas);
+            JSONArray jsonArr = jsonObj.getJSONArray("Entradas");
+            Ubicaciones=new String[jsonArr.length()];
+            entradas=new Entrada[jsonArr.length()];
+                Button boton= findViewById(R.id.button);
+                if(jsonArr.length()<1){
+                    boton.setVisibility(View.VISIBLE);
+                    hayEntradas=false;
+                }else{
+                    boton.setVisibility(View.GONE);
+                }
+                for(int i=0;i<jsonArr.length();i++){
+                    entradas[i]=new Entrada(jsonArr.getJSONObject(i));
+                    Ubicaciones[i]=entradas[i].Ubicacion;
+
+
+
+                }
+
+        }catch(Exception e){}
+        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, Ubicaciones);
+        final ListView listview = (ListView) findViewById(R.id.listView);
+        listview.setAdapter(adapter);
+
     }
 
     private void ConsultarUbicaciones(String IdFuncion){

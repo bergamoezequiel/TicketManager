@@ -3,11 +3,12 @@ package com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entida
 import org.json.JSONObject;
 
 public class Cliente {
-    private String id;
-    private String nombre;
-    private String apellido;
-    private String dni;
-    private String nombreUsuario;
+    private String id="UNKNOWN";
+    private String nombre="UNKNOWN";
+    private String apellido="UNKNOWN";
+    private String dni="UNKNOWN";
+    private String nombreUsuario="UNKNOWN";
+    private String jsonString="UNKNOWN";
 
     public Cliente(JSONObject json){
         try {
@@ -18,15 +19,25 @@ public class Cliente {
            this.nombreUsuario=json.get("NombreDeUsuario").toString();
 
         }catch(Exception e){
-            this.id="UNKNOWN";
-            this.nombre="UNKNOWN";
-            this.apellido="UNKNOWN";
-            this.dni="UNKNOWN";
-            this.nombreUsuario="UNKNOWN";
 
         }
 
 
+    }
+    public Cliente(String IdCliente){
+        GetRestAPIDAO cliDAO= new GetRestAPIDAO();
+        try {
+            this.jsonString = cliDAO.execute(UrlBackend.URL + "/Cliente/" + IdCliente).get();
+            JSONObject jsonObj=new JSONObject(jsonString);
+                this.id=jsonObj.get("IdCliente").toString();
+                this.nombre=jsonObj.get("Nombre").toString();
+                this.apellido=jsonObj.get("Apellido").toString();
+                this.dni=jsonObj.get("DNI").toString();
+                this.nombreUsuario=jsonObj.get("NombreDeUsuario").toString();
+
+
+
+            }catch (Exception e){}
     }
 
     public String GetNombre(){
@@ -43,6 +54,9 @@ public class Cliente {
     }
     public String GetId(){
         return this.id;
+    }
+    public String GetJsonString(){
+        return this.jsonString;
     }
 
 

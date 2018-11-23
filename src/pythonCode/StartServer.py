@@ -203,6 +203,9 @@ class Intereses(Resource):
 			c = conn.cursor()
 			print(request)
 			#print(request.json["DNI"])
+			if c.execute('SELECT count(*) FROM INTERESES where ID_CLIENTE=? and ID_FUNCION=?',(request.json["IdCliente"],request.json["IdFuncion"], )).fetchone()[0]>0:
+				Entradas={"error":1}
+				return Entradas,200
 			c.execute('INSERT INTO INTERESES VALUES (?,?)',(request.json["IdCliente"],request.json["IdFuncion"]))
 			conn.commit()
 			return Entradas,200
@@ -231,14 +234,14 @@ class Intereses(Resource):
 api.add_resource(Clientes, "/Clientes")
 api.add_resource(Cliente, "/Cliente/<string:name>")
 api.add_resource(EmpresasEmisoras, "/Empresas")
-api.add_resource(Funciones, "/Funciones") #http://192.168.0.13:5000/Funciones?cuitEmp=30-69726350-7&IdEspectaculo=1-SPIDER ejemplo de invocacion
-api.add_resource(Espectaculos,"/Espectaculos") #Espectaculos por empresa	http://192.168.0.13:5000/Espectaculos?cuitEmp=30-69726350-7
+api.add_resource(Funciones, "/Funciones") #http://192.168.0.110:5000/Funciones?cuitEmp=30-69726350-7&IdEspectaculo=1-SPIDER ejemplo de invocacion
+api.add_resource(Espectaculos,"/Espectaculos") #Espectaculos por empresa	http://192.168.0.110:5000/Espectaculos?cuitEmp=30-69726350-7
 api.add_resource(Entradas,"/Entradas")
 api.add_resource(Intereses,"/Intereses")
-
 api.add_resource(InfoCompletaEntradas,"/InformacionCompleta/Entradas")#http://192.168.0.110:5000/InformacionCompleta/Entradas?IdCliente=1
 api.add_resource(CodigosPromocionales,"/CodigosPromocionales")
 api.add_resource(CodigosPromocionalesPorCliente,"/<string:name>/CodigosPromocionales")
+
 
 
 
