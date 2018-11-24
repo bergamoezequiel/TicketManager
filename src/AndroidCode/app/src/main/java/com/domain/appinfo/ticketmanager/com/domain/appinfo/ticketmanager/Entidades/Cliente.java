@@ -119,5 +119,26 @@ public class Cliente {
         }
 
 
+        public Interes[] getIntereses(){
+            Interes[] intereses=new Interes[0];
+            String URL=UrlBackend.URL+"/Intereses?IdCliente="+this.id;
+            GetRestAPIDAO getIntereses= new GetRestAPIDAO();
+            try {
+                String respIntereses = getIntereses.execute(URL).get();
+                JSONObject json= new JSONObject(respIntereses);
+                JSONArray jsonArr = json.getJSONArray("Intereses");
+                intereses=new Interes[jsonArr.length()];
+                for(int i=0;i<jsonArr.length();i++){
+                    intereses[i] =new Interes(jsonArr.getJSONObject(i));
+
+
+                }
+
+
+            }catch(Exception e){}
+            return intereses;
+        }
+
+
 
 }

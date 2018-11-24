@@ -18,110 +18,62 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Cliente;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Interes;
 import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.UrlBackend;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class MainActivity_Alertas extends AppCompatActivity {
-
+    public Interes[] intereses;
+    public String[] nombreEspectaculo;
+    public Cliente cliente;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main__alertas);
         TextView text = (TextView) findViewById(R.id.textView);
         text.setText(getIntent().getStringExtra("IdCliente"));
-        ConsultarAlertas(getIntent().getStringExtra("IdCliente"));
-    }
-
-    public void ConsultarAlertas(String IdCliente){
-        String tag_json_obj = "json_obj_req";
-        final ProgressDialog pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Loading...");
-        pDialog.show();
-
-        String url =UrlBackend.URL+"/Intereses?IdCliente="+IdCliente;
-        pDialog.setMessage(url);
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                url, null,
-                new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        pDialog.hide();
-                        RespuestaJSON(response);
-
-                    }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        requestQueue.add(jsonObjReq);
-
-
-    }
-
-    private void RespuestaJSON(JSONObject response) {
-        TextView text = (TextView) findViewById(R.id.textView);
-       // text.setText(response.toString());
-        JSONArray jsonArr;
-        String[] NombresEspectaculos=new String[0];
-        String[] NombreEmpresa=new String[0];
-        String[] Horas=new String[0];
-        String[] Dias= new String[0];
-        String[] IdFunciones = new String[0];
-        String[] cantidadDeEntradas = new String[0];
-
-        try {
-            jsonArr = response.getJSONArray("Intereses");
-            NombresEspectaculos=new String[jsonArr.length()];
-            NombreEmpresa=new String[jsonArr.length()];
-            Horas=new String[jsonArr.length()];
-            Dias=new String[jsonArr.length()];
-            IdFunciones=new String[jsonArr.length()];
-            cantidadDeEntradas=new String[jsonArr.length()];
-
-            for(int i=0;i<jsonArr.length();i++){
-                JSONObject jsonEspectaculo = jsonArr.getJSONObject(i);
-                NombresEspectaculos[i]=jsonEspectaculo.getString("NombreEspectaculo");
-                NombreEmpresa[i]=jsonEspectaculo.getString("NombreEmpresaEmisora");
-                Horas[i]=jsonEspectaculo.getString("Hora");
-                Dias[i]=jsonEspectaculo.getString("Dia");
-                IdFunciones[i]=jsonEspectaculo.getString("IdFuncion");
-                cantidadDeEntradas[i]=jsonEspectaculo.getString("CantidadDeEntradas");
-
-
-            }
-        }catch(Exception e){text.setText("error");}
-       // text.setText(IdFunciones.toString());
-        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, NombresEspectaculos ,NombreEmpresa,Horas,Dias,IdFunciones,cantidadDeEntradas);
+        JSONObject js= new JSONObject();
+        try{
+            js=new JSONObject(getIntent().getStringExtra("IdCliente"));
+        }
+        catch(Exception e){}
+        cliente=new Cliente(js);
+        ConsultarAlertas();
+        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this,nombreEspectaculo , intereses);
         final ListView listview = (ListView) findViewById(R.id.listView);
         listview.setAdapter(adapter);
     }
 
+    public void ConsultarAlertas(){
+            intereses=cliente.getIntereses();
+            nombreEspectaculo=new String[intereses.length];
+        for(int i=0;i<intereses.length;i++) {
+            nombreEspectaculo[i]=intereses[i].getNombresEspectaculo();
+        }
+
+    }
+
+    private void RespuestaJSON(JSONObject response) {
+
+
+
+    }
+
     public class MySimpleArrayAdapter extends ArrayAdapter<String> {
         private final Context context;
-        private final String[] NombresEspectaculos;
-        private final String[] NombresEmpresa;
-        private final String[] Horas;
-        private final String[] Dias;
-        private final String[] IdFunciones;
-        private final String[] cantidadDeEntradas;
+        private final Interes[] intereses;
+        private final String[] nombresEspectaculos;
 
 
-        public MySimpleArrayAdapter(Context context,String[] NombreEspectaculos,String[] NombresEmpresa, String[] Horas, String[] Dias, String[] IdFunciones ,String[] cantidadDeEntradas) {
-            super(context, R.layout.rowlayout_espectaculos, NombreEspectaculos);
+
+        public MySimpleArrayAdapter(Context context,String[] nombresEspectaculos,Interes[] intereses) {
+            super(context, R.layout.rowlayout_espectaculos,nombresEspectaculos);
             this.context = context;
-            this.NombresEspectaculos= NombreEspectaculos;
-            this.NombresEmpresa = NombresEmpresa;
-            this.Horas=Horas;
-            this.Dias=Dias;
-            this.IdFunciones=IdFunciones;
-            this.cantidadDeEntradas=cantidadDeEntradas;
+            this.nombresEspectaculos= nombresEspectaculos;
+            this.intereses = intereses;
 
         }
 
@@ -134,19 +86,19 @@ public class MainActivity_Alertas extends AppCompatActivity {
             TextView textView2 = (TextView) rowView.findViewById(R.id.EEmisora);
             TextView textView3 = (TextView) rowView.findViewById(R.id.FechaHora);
             TextView textView4 = (TextView) rowView.findViewById(R.id.Disponibilidad);
-            if (Integer.valueOf(cantidadDeEntradas[position])>0){
+            if (Integer.valueOf(intereses[position].getCantidadDeEntradas())>0){
                 textView4.setTextColor(Color.GREEN);
-                textView4.setText("Hay "+cantidadDeEntradas[position]+" entrada/s disponible/s!" );
+                textView4.setText("Hay "+intereses[position].getCantidadDeEntradas()+" entrada/s disponible/s!" );
             }
             else{textView4.setText("No hay entradas disponibles!" );}
 
 
-            textView.setText(NombresEspectaculos[position]);
-            textView2.setText(NombresEmpresa[position]);
-            textView3.setText(Dias[position]+ "  "+Horas[position]);
+            textView.setText(nombresEspectaculos[position]);
+            textView2.setText(intereses[position].getNombreEmpresa());
+            textView3.setText(intereses[position].getDia()+ "  "+intereses[position].getHora());
 
             // Change the icon for Windows and iPhone
-            String s = NombresEspectaculos[position];
+            //String s = NombresEspectaculos[position];
 
 
 

@@ -35,6 +35,7 @@ public class MisEntradas_VerEntrada extends AppCompatActivity {
     private String ID_FUNCION;
     private String UBICACION;
     Entrada entrada;
+    CodigoPromocional[] codigoPromocionals;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +67,7 @@ public class MisEntradas_VerEntrada extends AppCompatActivity {
             JSONArray jsonArr;
             jsonArr = jsonObj.getJSONArray("CodigosPromocionales");
 
-            CodigoPromocional[] codigoPromocionals = new CodigoPromocional[jsonArr.length()];
+             codigoPromocionals = new CodigoPromocional[jsonArr.length()];
 
             for (int i = 0; i < codigoPromocionals.length; i++) {
                 codigoPromocionals[i] = new CodigoPromocional(jsonArr.getJSONObject(i));
@@ -137,23 +138,27 @@ public class MisEntradas_VerEntrada extends AppCompatActivity {
                 Cliente cliente= new Cliente(jsCli);
                 json.put("IdCliente", cliente.GetId());
                 if (opcion1Selected){
-                    json.put("CodProm",opcion1Codigo );
+                    //json.put("CodProm",opcion1Codigo );
+                    codigoPromocionals[1].asignar(cliente.GetId());
 
                 }
                 if (opcion2Selected){
-                    json.put("CodProm",opcion2Codigo );
+                    //json.put("CodProm",opcion2Codigo );
+                    codigoPromocionals[2].asignar(cliente.GetId());
 
                 }
                 if (opcion3Selected){
-                    json.put("CodProm",opcion3Codigo );
+                    //json.put("CodProm",opcion3Codigo );
+                    codigoPromocionals[3].asignar(cliente.GetId());
 
                 }
 
 
             } catch (Exception e) {
             }
-        asignarCodigoPromocional(json);
-            liberarEntrada();
+        //asignarCodigoPromocional(json);
+
+            entrada.liberar();
         super.onBackPressed();
     }
 
@@ -192,39 +197,7 @@ public class MisEntradas_VerEntrada extends AppCompatActivity {
     private void RespuestaJSON2(JSONObject response) {
 
     }
-    public void liberarEntrada(){
-        String tag_json_obj = "json_obj_req";
-        final ProgressDialog pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Loading...");
-        pDialog.show();
 
-        String url =UrlBackend.URL+"/Entradas?Ubicacion="+UBICACION+"&IdFuncion="+ID_FUNCION;
-        pDialog.setMessage(url);
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.DELETE,
-                url, null,
-                new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        pDialog.hide();
-                        RespuestaJSON3(response);
-
-                    }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        requestQueue.add(jsonObjReq);
-
-
-    }
-
-
-    private void RespuestaJSON3(JSONObject response) {}
 
 
 }

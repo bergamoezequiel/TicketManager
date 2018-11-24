@@ -60,9 +60,9 @@ c.execute('''CREATE TABLE CODIGOS_PROMOCIONALES
 c.execute("INSERT INTO CODIGOS_PROMOCIONALES VALUES ('1-FUNC','Hjfs-46fD-SFh5','Entrada gratis','NO_ASIGNADA')")
 c.execute("INSERT INTO CODIGOS_PROMOCIONALES VALUES ('1-FUNC','Hjfs-46fD-SFh6','balde de pochoclos gratis','NO_ASIGNADA')")
 c.execute("INSERT INTO CODIGOS_PROMOCIONALES VALUES ('1-FUNC','Hjfs-46fD-SFh7','35% de descuento en mcDonalds','NO_ASIGNADA')")
-c.execute("INSERT INTO CODIGOS_PROMOCIONALES VALUES ('4-FUNC','Hjfs-46fD-SFh5','Entrada gratis','NO_ASIGNADA')")
-c.execute("INSERT INTO CODIGOS_PROMOCIONALES VALUES ('4-FUNC','Hjfs-46fD-SFh6','balde de pochoclos gratis','NO_ASIGNADA')")
-c.execute("INSERT INTO CODIGOS_PROMOCIONALES VALUES ('4-FUNC','Hjfs-46fD-SFh7','35% de descuento en mcDonalds','NO_ASIGNADA')")
+c.execute("INSERT INTO CODIGOS_PROMOCIONALES VALUES ('4-FUNC','Hjfs-46fD-SFh8','Entrada gratis','NO_ASIGNADA')")
+c.execute("INSERT INTO CODIGOS_PROMOCIONALES VALUES ('4-FUNC','Hjfs-46fD-SFh9','balde de pochoclos gratis','NO_ASIGNADA')")
+c.execute("INSERT INTO CODIGOS_PROMOCIONALES VALUES ('4-FUNC','Hjfs-46fD-SFh0','35% de descuento en mcDonalds','NO_ASIGNADA')")
 
 # Save (commit) the changes
 conn.commit()

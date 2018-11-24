@@ -4,7 +4,7 @@ from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
 
 app = Flask(__name__)
-app.config['SERVER_NAME'] = '192.168.43.147:5000'
+app.config['SERVER_NAME'] = '192.168.0.104:5000'
 api = Api(app)
 
 

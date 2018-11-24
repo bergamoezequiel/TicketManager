@@ -32,4 +32,18 @@ public class CodigoPromocional {
     public String getCodigo() {
         return Codigo;
     }
+
+    public void asignar(String idCliente){
+        JSONObject json= new JSONObject();
+        try {
+            json.put("IdCliente", idCliente);
+            json.put("CodProm",this.Codigo );
+            PostRestAPIDAO post=new PostRestAPIDAO();
+            String URL=UrlBackend.URL+"/CodigosPromocionales";
+            String postResponse=post.execute(json.toString(),URL).get();
+        }catch(Exception e){}
+
+    }
+
+
 }

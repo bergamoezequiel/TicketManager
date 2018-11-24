@@ -40,7 +40,7 @@ public class Menu extends AppCompatActivity {
     }
     public void AlertasBottonAction(View view) {
         Intent intent = new Intent(this, MainActivity_Alertas.class);
-        intent.putExtra("IdCliente",this.cliente.GetId() );
+        intent.putExtra("IdCliente",this.cliente.GetJsonString() );
         startActivity(intent);
     }
 

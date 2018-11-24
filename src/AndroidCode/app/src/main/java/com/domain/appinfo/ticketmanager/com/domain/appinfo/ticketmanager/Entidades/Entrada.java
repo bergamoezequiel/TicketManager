@@ -43,4 +43,13 @@ public class Entrada {
     public String getJsonFullInfo() {
         return JsonFullInfo;
     }
+    //Desasociar de un cliente
+    public void liberar() {
+        String URL=UrlBackend.URL+"/Entradas?Ubicacion="+this.Ubicacion+"&IdFuncion="+this.IdFuncion;
+        try {
+            DeleteRestAPIDAO deleteEntrada = new DeleteRestAPIDAO();
+            String respuestaLiberacion = deleteEntrada.execute(URL).get();
+        }catch(Exception e){}
+
+    }
 }
