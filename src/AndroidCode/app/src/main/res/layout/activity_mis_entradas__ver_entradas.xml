@@ -1,62 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
     tools:context=".MisEntradas_VerEntrada">
 
     <TextView
-        android:id="@+id/Espectaculo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintHorizontal_bias="0.19"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"  />
+        style="@style/Titulo"
+        android:text="Gestionar Devolución"
+        android:layout_weight="0.5"/>
 
-    <TextView
-        android:id="@+id/EmpEmisora"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:text="TextView"
-        app:layout_constraintHorizontal_bias="0.15"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/DiaHoraUbicacion"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="168dp"
-        android:text="TextView"
-        app:layout_constraintHorizontal_bias="0.15"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/ticketImage"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:paddingTop="10dp"
+            android:paddingRight="20dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ticket" />
+
+        <TextView
+            android:id="@+id/Espectaculo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="@+id/label"
+            android:layout_toRightOf="@id/ticketImage"
+            android:paddingTop="10dp"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/EmpEmisora"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/ticketImage"
+            android:layout_below="@id/Espectaculo"
+            android:paddingTop="10dp"
+            android:text="@+id/label"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/DiaHoraUbicacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/EmpEmisora"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@id/ticketImage"
+            android:paddingTop="10dp"
+            android:text="@+id/label"
+            android:textSize="12dp" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/Codig"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="116dp"
-        android:text="TextView"
-        app:layout_constraintHorizontal_bias="0.19"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="0dp"
+        android:textAlignment="center"
+        android:text="Códigos Promocionales Disponibles"
+        android:textSize="20dp"
+        android:layout_weight="0.5"/>
+
 
     <RadioGroup
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="292dp"
-        app:layout_constraintHorizontal_bias="0.048"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <RadioButton
             android:id="@+id/opcion1"
@@ -78,21 +97,14 @@
             android:layout_height="wrap_content"
             android:onClick="opcion3ButtonClicked"
             android:text="" />
-
-
     </RadioGroup>
 
     <Button
         android:id="@+id/button6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="420dp"
-        android:text="DevolverEntrada"
+        style="@style/BotonMenu"
+        android:layout_weight="0.1"
         android:onClick="devolverEntradaButtonClicked"
-        app:layout_constraintHorizontal_bias="0.469"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="Devolver Entrada" />
 
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

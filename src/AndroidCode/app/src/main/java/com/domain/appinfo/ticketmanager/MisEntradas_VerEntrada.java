@@ -82,7 +82,6 @@ public class MisEntradas_VerEntrada extends AppCompatActivity {
 
     private void RespuestaJSON(JSONObject response) {
         TextView textCod = findViewById(R.id.Codig);
-        textCod.setText(response.toString());
         JSONArray jsonArr;
        try {
            jsonArr = response.getJSONArray("CodigosPromocionales");

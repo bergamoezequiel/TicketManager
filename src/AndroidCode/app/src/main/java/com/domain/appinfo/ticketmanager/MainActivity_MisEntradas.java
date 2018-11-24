@@ -119,8 +119,6 @@ public class MainActivity_MisEntradas extends AppCompatActivity {
 
     private void RespuestaJSON(JSONObject response) {
         TextView text = (TextView) findViewById(R.id.textView);
-        text.setText(response.toString());
-
         JSONArray jsonArr;
         //Se arman dos listados, de nombres y descripciones para pasarselo al adaptador de la lista
 

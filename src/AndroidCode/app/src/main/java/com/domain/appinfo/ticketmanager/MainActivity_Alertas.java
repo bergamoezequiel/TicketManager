@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,8 +30,6 @@ public class MainActivity_Alertas extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main__alertas);
-        TextView text = (TextView) findViewById(R.id.textView);
-        text.setText(getIntent().getStringExtra("IdCliente"));
         ConsultarAlertas(getIntent().getStringExtra("IdCliente"));
     }
 
@@ -134,11 +133,17 @@ public class MainActivity_Alertas extends AppCompatActivity {
             TextView textView2 = (TextView) rowView.findViewById(R.id.EEmisora);
             TextView textView3 = (TextView) rowView.findViewById(R.id.FechaHora);
             TextView textView4 = (TextView) rowView.findViewById(R.id.Disponibilidad);
+            ImageView FaceImage = (ImageView) rowView.findViewById(R.id.faceImage);
             if (Integer.valueOf(cantidadDeEntradas[position])>0){
                 textView4.setTextColor(Color.GREEN);
                 textView4.setText("Hay "+cantidadDeEntradas[position]+" entrada/s disponible/s!" );
+                FaceImage.setImageResource(R.drawable.happyface);
             }
-            else{textView4.setText("No hay entradas disponibles!" );}
+            else{
+                textView4.setText("No hay entradas disponibles!" );
+                textView4.setTextColor(Color.RED);
+                FaceImage.setImageResource(R.drawable.sadface);
+            }
 
 
             textView.setText(NombresEspectaculos[position]);

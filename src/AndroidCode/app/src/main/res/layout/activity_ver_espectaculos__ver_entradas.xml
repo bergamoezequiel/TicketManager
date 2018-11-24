@@ -11,26 +11,20 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:textAlignment="center"
-        android:textSize="26dp"
+        style="@style/Titulo"
         android:text="Entradas Disponibles"
         />
 
     <ListView
         android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"/>
+        style="@style/Lista"/>
 
     <Button
         android:id="@+id/button"
         style="@style/BotonMenu"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:visibility="invisible"
+        android:layout_weight="1.5"
+        android:visibility="visible"
         android:layout_marginLeft="200dp"
         android:textSize="15dp"
         android:text="Notificar Interes"
