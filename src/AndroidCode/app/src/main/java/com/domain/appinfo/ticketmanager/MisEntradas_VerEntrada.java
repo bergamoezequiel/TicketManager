@@ -15,6 +15,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Cliente;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.CodigoPromocional;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.EmpresaEmisora;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Entrada;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.GetRestAPIDAO;
 import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.UrlBackend;
 
 import org.json.JSONArray;
@@ -29,91 +34,70 @@ public class MisEntradas_VerEntrada extends AppCompatActivity {
     private boolean opcion3Selected=false;
     private String ID_FUNCION;
     private String UBICACION;
+    Entrada entrada;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mis_entradas__ver_entradas);
+        JSONObject js;
+        entrada = new Entrada();
+        try {
+             js = new JSONObject(getIntent().getStringExtra("Entrada"));
+
+            entrada.setFullInfo(js);
+        }catch (Exception e){}
+
         TextView textEspectaculo = findViewById(R.id.Espectaculo);
+        textEspectaculo.setText(entrada.NombreEspectaculo);
+
         TextView textEmpresa = findViewById(R.id.EmpEmisora);
         TextView textDiaHoraUbicacion = findViewById(R.id.DiaHoraUbicacion);
-        String concatenado=getIntent().getStringExtra("IdEntrada");
-        String[] words=concatenado.split(",",7);
-        textEspectaculo.setText(words[2]);
-        textEmpresa.setText(words[1]);
-        textDiaHoraUbicacion.setText(words[5]+"  "+words[4]+"   "+words[3]);
-        UBICACION= words[3];
-        ID_FUNCION=words[0];
-        ConsultarCodigos(words[0]);
+        textEmpresa.setText(entrada.NombreEmpresa);
+        textDiaHoraUbicacion.setText(entrada.Fecha+"  "+entrada.Hora+"   "+entrada.Ubicacion);
 
-    }
+       // ConsultarCodigos(entrada.IdFuncion);
+        UBICACION=entrada.Ubicacion;
+        ID_FUNCION=entrada.IdFuncion;
+        GetRestAPIDAO getCodigosPromocionales= new GetRestAPIDAO();
+        try {
+            String jsonCodigosPromocionales = getCodigosPromocionales.execute(UrlBackend.URL+"/CodigosPromocionales?IdFuncion=" + entrada.IdFuncion).get();
+            JSONObject jsonObj = new JSONObject(jsonCodigosPromocionales );
 
-    private void ConsultarCodigos(String IdFuncion){
-        String tag_json_obj = "json_obj_req";
-        final ProgressDialog pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Loading...");
-        pDialog.show();
+            JSONArray jsonArr;
+            jsonArr = jsonObj.getJSONArray("CodigosPromocionales");
 
-        String url =UrlBackend.URL+"/CodigosPromocionales?IdFuncion="+IdFuncion;
-        pDialog.setMessage(url);
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                url, null,
-                new Response.Listener<JSONObject>() {
+            CodigoPromocional[] codigoPromocionals = new CodigoPromocional[jsonArr.length()];
 
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        pDialog.hide();
-                        RespuestaJSON(response);
+            for (int i = 0; i < codigoPromocionals.length; i++) {
+                codigoPromocionals[i] = new CodigoPromocional(jsonArr.getJSONObject(i));
+                if(i==0){
+                    Button bot1= findViewById(R.id.opcion1);
+                    bot1.setText(codigoPromocionals[i].getDescripcion());
+                    opcion1Codigo=codigoPromocionals[i].getCodigo();
 
-                    }
-                }, new Response.ErrorListener() {
+                }
+                if(i==1){
+                    Button bot1= findViewById(R.id.opcion2);
+                    bot1.setText(codigoPromocionals[i].getDescripcion());
+                    opcion2Codigo=codigoPromocionals[i].getCodigo();
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                }
+                if(i==2){
+                    Button bot1= findViewById(R.id.opcion3);
+                    bot1.setText(codigoPromocionals[i].getDescripcion());
+                    opcion3Codigo=codigoPromocionals[i].getCodigo();
+
+
+                }
             }
-        });
-
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        requestQueue.add(jsonObjReq);
-
+        }catch(Exception e){}
 
     }
 
 
 
-    private void RespuestaJSON(JSONObject response) {
-        TextView textCod = findViewById(R.id.Codig);
-        JSONArray jsonArr;
-       try {
-           jsonArr = response.getJSONArray("CodigosPromocionales");
-
-           for (int i = 0; i < jsonArr.length(); i++) {
-               JSONObject  jsonCodigo= jsonArr.getJSONObject(i);
-               if(i==0){
-                   Button bot1= findViewById(R.id.opcion1);
-                   bot1.setText(jsonCodigo.getString("Descripcion"));
-                   opcion1Codigo=jsonCodigo.getString("CodigoPromocional");
-
-               }
-               if(i==1){
-                   Button bot1= findViewById(R.id.opcion2);
-                   bot1.setText(jsonCodigo.getString("Descripcion"));
-                   opcion2Codigo=jsonCodigo.getString("CodigoPromocional");
-
-               }
-               if(i==2){
-                   Button bot1= findViewById(R.id.opcion3);
-                   bot1.setText(jsonCodigo.getString("Descripcion"));
-                   opcion3Codigo=jsonCodigo.getString("CodigoPromocional");
 
 
-               }
-
-
-           }
-       }catch(Exception e){}
-
-
-    }
     public void opcion1ButtonClicked(View view) {
         // Is the button now checked?
         Toast.makeText(this,
@@ -149,7 +133,9 @@ public class MisEntradas_VerEntrada extends AppCompatActivity {
         JSONObject json= new JSONObject();
 
             try {
-                json.put("IdCliente", getIntent().getStringExtra("IdCliente"));
+                JSONObject jsCli= new JSONObject(getIntent().getStringExtra("IdCliente"));
+                Cliente cliente= new Cliente(jsCli);
+                json.put("IdCliente", cliente.GetId());
                 if (opcion1Selected){
                     json.put("CodProm",opcion1Codigo );
 

@@ -23,6 +23,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Cliente;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Entrada;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Funcion;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.GetRestAPIDAO;
 import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.UrlBackend;
 
 import org.json.JSONArray;
@@ -32,85 +36,45 @@ import static android.widget.Toast.LENGTH_LONG;
 
 public class VerEspectaculos_VerEntradas extends AppCompatActivity {
     private boolean hayEntradas=true;
+    public Funcion funcion;
+    public Entrada[] entradas;
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ver_espectaculos__ver_entradas);
         TextView text = (TextView) findViewById(R.id.textView);
-        ConsultarUbicaciones(getIntent().getStringExtra("IdFuncion"));
-    }
-
-    private void ConsultarUbicaciones(String IdFuncion){
-        String tag_json_obj = "json_obj_req";
-        final ProgressDialog pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Loading...");
-        pDialog.show();
-
-        String url =UrlBackend.URL+"/Entradas?IdFuncion="+IdFuncion;
-        pDialog.setMessage(url);
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                url, null,
-                new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        pDialog.hide();
-                        RespuestaJSON(response);
-
-                    }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        requestQueue.add(jsonObjReq);
-
-
-    }
-
-
-
-    private void RespuestaJSON(JSONObject response) {
-       // TextView text = (TextView) findViewById(R.id.textView);
-        //text.setText(response.toString());
-        JSONArray jsonArr;
-        //Se arman dos listados, de nombres y descripciones para pasarselo al adaptador de la lista
-        String[] Ubicaciones=new String[0];
-
-        try {
-            jsonArr = response.getJSONArray("Entradas");
-            Ubicaciones=new String[jsonArr.length()];
-            Button boton= findViewById(R.id.button);
-            if(jsonArr.length()<1){
-                boton.setVisibility(View.VISIBLE);
-                hayEntradas=false;
-
-            }else{
-                boton.setVisibility(View.GONE);
-
-
-            }
-            for(int i=0;i<jsonArr.length();i++){
-                JSONObject jsonEspectaculo = jsonArr.getJSONObject(i);
-                Ubicaciones[i]=jsonEspectaculo.getString("Ubicacion");
-
-
-
-            }
+        JSONObject js= new JSONObject();
+        try{
+            js=new JSONObject(getIntent().getStringExtra("Funcion"));
         }catch(Exception e){}
+        funcion=new Funcion(js);
+        Entrada[] entradas=funcion.GetEntradasDisponibles();
+        String[] Ubicaciones=new String[entradas.length];
+       //       getIntent().getStringExtra("funcion"), Toast.LENGTH_SHORT).show();
+                Button boton= findViewById(R.id.button);
+                if(entradas.length<1){
+                    boton.setVisibility(View.VISIBLE);
+                    hayEntradas=false;
+                }else{
+                    boton.setVisibility(View.GONE);
+                }
+                for(int i=0;i<entradas.length;i++){
+
+                    Ubicaciones[i]=entradas[i].Ubicacion;
+
+
+
+                }
+
 
         MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, Ubicaciones);
         final ListView listview = (ListView) findViewById(R.id.listView);
         listview.setAdapter(adapter);
 
-
     }
 
-
-
+  
 
     public class MySimpleArrayAdapter extends ArrayAdapter<String> {
         private final Context context;
@@ -151,13 +115,19 @@ public class VerEspectaculos_VerEntradas extends AppCompatActivity {
        JSONObject json= new JSONObject();
 
         if(!hayEntradas) {
-            try {
+          /*  try {
                 json.put("IdCliente", getIntent().getStringExtra("IdCliente"));
                 json.put("IdFuncion", getIntent().getStringExtra("IdFuncion"));
             } catch (Exception e) {
-            }
+            }*/
+            JSONObject CienteJSON=new JSONObject();
 
-            GuardarInteres(json);
+            try {
+                CienteJSON= new JSONObject(getIntent().getStringExtra("IdCliente"));
+            }catch (Exception e){}
+            Cliente cli= new Cliente(CienteJSON);
+            cli.GuardarInteres(funcion.getId(),this);
+            //GuardarInteres(json);
 
         }else{
             Toast.makeText(this,
@@ -168,49 +138,7 @@ public class VerEspectaculos_VerEntradas extends AppCompatActivity {
 
     }
 
-    private void GuardarInteres(JSONObject json){
-        String tag_json_obj = "json_obj_req";
-        final ProgressDialog pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Loading...");
-        pDialog.show();
 
-        String url =UrlBackend.URL+"/Intereses";
-        pDialog.setMessage(url);
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                url, json,
-                new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        pDialog.hide();
-                        RespuestaJSON2(response);
-
-                    }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        requestQueue.add(jsonObjReq);
-
-
-    }
-    private void RespuestaJSON2(JSONObject response) {
-        try {
-            String str = response.getString("error");
-            Toast.makeText(this,
-                    "Alerta generada previamente", Toast.LENGTH_SHORT).show();
-
-        }catch(Exception e){
-
-            Toast.makeText(this,
-                    "Alerta Generada", Toast.LENGTH_SHORT).show();
-        }
-    }
 
 
 }
