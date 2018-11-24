@@ -126,28 +126,35 @@ public class MisEntradas_VerEntrada extends AppCompatActivity {
     }
     public void devolverEntradaButtonClicked(View view) {
         // Is the button now checked?
-        Toast.makeText(this,
-                "Entrada devuelta", Toast.LENGTH_SHORT).show();
+
+        if(entrada.EstaVencida()){
+            Toast.makeText(this,
+                    "Entrada vecida, no puede devolverse", Toast.LENGTH_SHORT).show();
+        }
+        else {
 
 
+            Toast.makeText(this,
+                    "Entrada devuelta", Toast.LENGTH_SHORT).show();
 
-        JSONObject json= new JSONObject();
+
+            JSONObject json = new JSONObject();
 
             try {
-                JSONObject jsCli= new JSONObject(getIntent().getStringExtra("IdCliente"));
-                Cliente cliente= new Cliente(jsCli);
+                JSONObject jsCli = new JSONObject(getIntent().getStringExtra("IdCliente"));
+                Cliente cliente = new Cliente(jsCli);
                 json.put("IdCliente", cliente.GetId());
-                if (opcion1Selected){
+                if (opcion1Selected) {
                     //json.put("CodProm",opcion1Codigo );
-                    codigoPromocionals[1].asignar(cliente.GetId());
+                     codigoPromocionals[1].asignar(cliente.GetId());
 
                 }
-                if (opcion2Selected){
+                if (opcion2Selected) {
                     //json.put("CodProm",opcion2Codigo );
                     codigoPromocionals[2].asignar(cliente.GetId());
 
                 }
-                if (opcion3Selected){
+                if (opcion3Selected) {
                     //json.put("CodProm",opcion3Codigo );
                     codigoPromocionals[3].asignar(cliente.GetId());
 
@@ -156,10 +163,11 @@ public class MisEntradas_VerEntrada extends AppCompatActivity {
 
             } catch (Exception e) {
             }
-        //asignarCodigoPromocional(json);
+            //asignarCodigoPromocional(json);
 
             entrada.liberar();
-        super.onBackPressed();
+            super.onBackPressed();
+        }
     }
 
     public void asignarCodigoPromocional(JSONObject json){
