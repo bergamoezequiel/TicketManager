@@ -139,6 +139,26 @@ public class Cliente {
             return intereses;
         }
 
+    public CodigoPromocional[] getCodigosPromocionales(){
+        CodigoPromocional[] codigos=new CodigoPromocional[0];
+        String URL=UrlBackend.URL+"/"+ this.id+"/CodigosPromocionales";
+        GetRestAPIDAO getCodigos= new GetRestAPIDAO();
+        try {
+            String respIntereses = getCodigos.execute(URL).get();
+            JSONObject json= new JSONObject(respIntereses);
+            JSONArray jsonArr = json.getJSONArray("CodigosPromocionales");
+            codigos=new CodigoPromocional[jsonArr.length()];
+            for(int i=0;i<jsonArr.length();i++){
+                codigos[i] =new CodigoPromocional(jsonArr.getJSONObject(i));
+
+
+            }
+
+
+        }catch(Exception e){}
+        return codigos;
+    }
+
 
 
 }

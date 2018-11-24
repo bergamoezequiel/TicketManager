@@ -17,85 +17,53 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Cliente;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.CodigoPromocional;
 import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.UrlBackend;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class MainActivity_MisCodigosPromocionales extends AppCompatActivity {
-
+    public CodigoPromocional[] codigos;
+    public String[] cod;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main__mis_codigos_promocionales);
-        ConsultarCodigos();
-    }
-
-    private void ConsultarCodigos(){
-        String tag_json_obj = "json_obj_req";
-        final ProgressDialog pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Loading...");
-        pDialog.show();
-
-        String url =UrlBackend.URL+"/"+ getIntent().getStringExtra("IdCliente")+"/CodigosPromocionales";
-        pDialog.setMessage(url);
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                url, null,
-                new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        pDialog.hide();
-                        RespuestaJSON(response);
-
-                    }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        requestQueue.add(jsonObjReq);
-
-
-    }
-    private void RespuestaJSON(JSONObject response) {
-        JSONArray jsonArr;
-        //Se arman dos listados, de nombres y descripciones para pasarselo al adaptador de la lista
-        String[] Codigos=new String[0];
-        String[] Descripciones=new String[0];
-        String[] Dias=new String[0];
+        JSONObject clienteJSON= new JSONObject();
         try {
-            jsonArr = response.getJSONArray("CodigosPromocionales");
-            Codigos=new String[jsonArr.length()];
-            Descripciones=new String[jsonArr.length()];
-            for(int i=0;i<jsonArr.length();i++){
-                JSONObject jsonEspectaculo = jsonArr.getJSONObject(i);
-                Codigos[i]=jsonEspectaculo.getString("CodigoPromocional");
-                Descripciones[i]=jsonEspectaculo.getString("Descripcion");
-            }
-        }catch(Exception e){}
-
-        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, Codigos ,Descripciones);
+            clienteJSON = new JSONObject(getIntent().getStringExtra("IdCliente"));
+        }catch (Exception e){}
+        Cliente cliente= new Cliente(clienteJSON);
+        codigos=cliente.getCodigosPromocionales();
+        cod=new String[codigos.length];
+        for(int i=0;i<codigos.length;i++) {
+            cod[i]=codigos[i].getCodigo();
+        }
+        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, codigos ,cod);
         final ListView listview = (ListView) findViewById(R.id.listView);
         listview.setAdapter(adapter);
 
+        //ConsultarCodigos();
     }
+
+
+
+
 
     public class MySimpleArrayAdapter extends ArrayAdapter<String> {
         private final Context context;
-        private final String[] Codigos;
-        private final String[] Descripciones;
+        private final CodigoPromocional[] CodigosPromocionales;
+        private final String[] codigos;
 
 
 
-        public MySimpleArrayAdapter(Context context, String[] Codigos, String[] Descripciones) {
-            super(context, R.layout.rowlayout_mis_codigos_promocionales, Codigos);
+        public MySimpleArrayAdapter(Context context, CodigoPromocional[] CodigosProm, String[] cod) {
+            super(context, R.layout.rowlayout_mis_codigos_promocionales, cod);
             this.context = context;
-            this.Codigos=Codigos;
-            this.Descripciones=Descripciones;
+            this.codigos=cod;
+            this.CodigosPromocionales=CodigosProm;
         }
 
         @Override
@@ -108,9 +76,8 @@ public class MainActivity_MisCodigosPromocionales extends AppCompatActivity {
 
 
 
-            textView.setText(Codigos[position]);
-            textView2.setText(Descripciones[position]);
-
+            textView.setText(cod[position]);
+            textView2.setText(CodigosPromocionales[position].getDescripcion());
 
             // Change the icon for Windows and iPhone
            // String s = NombresEspectaculos[position];
