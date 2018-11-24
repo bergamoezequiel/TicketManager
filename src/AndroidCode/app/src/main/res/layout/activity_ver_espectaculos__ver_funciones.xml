@@ -10,15 +10,12 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:textAlignment="center"
         android:text="Funciones Disponibles"
-        android:textSize="24dp" />
+        style="@style/Titulo"
+        />
 
     <ListView
         android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        style="@style/Lista"
         />
 </LinearLayout>

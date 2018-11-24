@@ -30,6 +30,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
     }
+
+    public void ClearText(View view) {
+        EditText editText = (EditText) findViewById(R.id.editText);
+        editText.getText().clear();
+    }
     public void LogInBottonAction(View view) {
         EditText editText = (EditText) findViewById(R.id.editText);
         Cliente cli= new Cliente(editText.getText().toString());

@@ -4,49 +4,56 @@
     android:layout_height="wrap_content" >
 
 
+    <ImageView
+        android:id="@+id/faceImage"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:scaleType="centerCrop"/>
     <TextView
 
         android:id="@+id/Espectaculo"
-        android:layout_width="400dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="0dp"
-
+        android:paddingTop="10dp"
+        android:layout_toRightOf="@id/faceImage"
         android:text="@+id/label"
-        android:textSize="80px"></TextView>
+        android:textSize="20dp"></TextView>
 
     <TextView
         android:id="@+id/EEmisora"
-        android:layout_width="400dp"
-        android:layout_height="40dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="39dp"
-
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Espectaculo"
+        android:layout_toRightOf="@id/faceImage"
         android:text="@+id/label"
-        android:textSize="50px"></TextView>
+        android:paddingTop="10dp"
+        android:textSize="16dp"></TextView>
 
     <TextView
         android:id="@+id/FechaHora"
-        android:layout_width="400dp"
-        android:layout_height="40dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="80dp"
-
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/faceImage"
+        android:layout_below="@id/EEmisora"
+        android:paddingTop="10dp"
+        android:textSize="12dp"
         android:text="@+id/label"
-        android:textSize="50px"></TextView>
+        ></TextView>
 
     <TextView
         android:id="@+id/Disponibilidad"
-        android:layout_width="400dp"
-        android:layout_height="40dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="120dp"
-
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/faceImage"
+        android:layout_below="@id/FechaHora"
         android:text="@+id/label"
-        android:textSize="50px"></TextView>
+        android:paddingTop="10dp"
+        android:textSize="20dp"></TextView>
 
 </RelativeLayout>

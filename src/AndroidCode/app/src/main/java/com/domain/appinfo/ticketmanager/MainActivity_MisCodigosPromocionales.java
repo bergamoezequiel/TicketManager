@@ -62,8 +62,6 @@ public class MainActivity_MisCodigosPromocionales extends AppCompatActivity {
 
     }
     private void RespuestaJSON(JSONObject response) {
-        TextView text = findViewById(R.id.textView);
-        text.setText(response.toString());
         JSONArray jsonArr;
         //Se arman dos listados, de nombres y descripciones para pasarselo al adaptador de la lista
         String[] Codigos=new String[0];
