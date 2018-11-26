@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Cliente;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Interes;
 
 import org.json.JSONObject;
 
@@ -20,6 +21,16 @@ public class Menu extends AppCompatActivity {
         TextView TextV = (TextView) findViewById(R.id.textView);
         this.cliente=this.CrearCliente();
         TextV.setText("Bienvenido "+ cliente.GetNombre()+" "+cliente.GetApellido());
+
+        Interes[] intereses=cliente.getIntereses();
+        for(int i =0;i<intereses.length;i++){
+            if (Integer.valueOf(intereses[i].getCantidadDeEntradas())>0){
+                NotificationHelper not= new NotificationHelper(this);
+                String mensaje="Hay entradas disponible para la funcion de"+intereses[i].getNombresEspectaculo()+"el dia"+intereses[i].getDia();
+                not.createNotification("Entradas Disponibles!",mensaje);
+            }
+        }
+
     }
 
     public void VerEspectaculosBottonAction(View view) {
