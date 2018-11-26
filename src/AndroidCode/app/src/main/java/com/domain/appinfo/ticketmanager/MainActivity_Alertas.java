@@ -36,7 +36,7 @@ public class MainActivity_Alertas extends AppCompatActivity {
         setContentView(R.layout.activity_main__alertas);
 
         TextView text = (TextView) findViewById(R.id.textView);
-        JSONObject js= new JSONObject();
+        text.setText(getIntent().getStringExtra("IdCliente"));        JSONObject js= new JSONObject();
         try{
             js=new JSONObject(getIntent().getStringExtra("IdCliente"));
         }

@@ -146,17 +146,17 @@ public class MisEntradas_VerEntrada extends AppCompatActivity {
                 json.put("IdCliente", cliente.GetId());
                 if (opcion1Selected) {
                     //json.put("CodProm",opcion1Codigo );
-                     codigoPromocionals[1].asignar(cliente.GetId());
+                     codigoPromocionals[0].asignar(cliente.GetId());
 
                 }
                 if (opcion2Selected) {
                     //json.put("CodProm",opcion2Codigo );
-                    codigoPromocionals[2].asignar(cliente.GetId());
+                    codigoPromocionals[1].asignar(cliente.GetId());
 
                 }
                 if (opcion3Selected) {
                     //json.put("CodProm",opcion3Codigo );
-                    codigoPromocionals[3].asignar(cliente.GetId());
+                    codigoPromocionals[2].asignar(cliente.GetId());
 
                 }
 
