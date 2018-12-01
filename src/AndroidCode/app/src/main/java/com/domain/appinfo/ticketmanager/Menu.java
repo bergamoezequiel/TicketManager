@@ -27,7 +27,7 @@ public class Menu extends AppCompatActivity {
             if (Integer.valueOf(intereses[i].getCantidadDeEntradas())>0){
                 NotificationHelper not= new NotificationHelper(this);
                 String mensaje="Hay entradas disponible para la funcion de "+intereses[i].getNombresEspectaculo()+"el dia"+intereses[i].getDia();
-                not.createNotification("Entradas Disponibles!",mensaje);
+                not.createNotification("Entradas Disponibles!",mensaje,intereses[i].getIdFunciones(),cliente);
             }
         }
 

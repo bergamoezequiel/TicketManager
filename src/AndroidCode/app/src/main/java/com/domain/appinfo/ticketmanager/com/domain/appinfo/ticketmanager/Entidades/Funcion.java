@@ -10,6 +10,25 @@ public class Funcion {
     private String jsonString;
 
     public Funcion(JSONObject json) {
+        Initialize(json);
+    }
+
+    public Funcion(String Id){
+        GetRestAPIDAO getfunciones= new GetRestAPIDAO();
+        String url=UrlBackend.URL+"/Funcion/"+Id;
+        try {
+            String jsonEspectaculos = getfunciones.execute(url).get();
+            JSONObject jsonObj = new JSONObject(jsonEspectaculos);
+            Initialize(jsonObj);
+
+
+
+
+        }catch(Exception e){}
+
+    }
+
+    public void Initialize(JSONObject json){
         try {
             this.id = json.getString("IdFuncion");
             this.Hora = json.getString("Hora");
@@ -21,6 +40,7 @@ public class Funcion {
         }
         this.jsonString = json.toString();
     }
+
 
     public String getId() {
         return id;
