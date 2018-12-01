@@ -70,37 +70,5 @@ public class Entrada {
              dateEntrada = sdf.parse(getMyTime);
         }catch(Exception e){}
         return dateEntrada.before(getCurrentDateTime);
-
-
-        /*  Calendar calendario= Calendar.getInstance();
-        String anioActual= String.valueOf(calendario.get(Calendar.YEAR));
-
-        String mesActual=String.valueOf(calendario.get(Calendar.MONTH));
-        if (mesActual.length()<2){
-            mesActual=0+mesActual;
-        }
-        String diaActual=String.valueOf(calendario.get(Calendar.DATE));
-        if (diaActual.length()<2){
-            diaActual=0+diaActual;
-        }
-        String horaActual = String.valueOf(calendario.get(Calendar.HOUR));
-        if (horaActual.length()<2){
-            horaActual=0+horaActual;
-        }
-        String minutoActual = String.valueOf(calendario.get(Calendar.MINUTE));
-        if (minutoActual.length()<2){
-            minutoActual=0+minutoActual;
-        }
-        String fechaHoraActual = anioActual+mesActual+diaActual+horaActual+minutoActual;
-
-        String anioEntrada=this.Fecha.split("/")[2];
-        String mesEntrada=this.Fecha.split("/")[1];
-        String diaEntrada=this.Fecha.split("/")[0];
-        String horaEntrada = this.Hora.split(":")[0];
-        String minutoEntrada = this.Hora.split(":")[1];
-        String fechaHoraEntrada = anioEntrada+mesEntrada+diaEntrada+horaEntrada+minutoEntrada;
-
-        return Double.valueOf(fechaHoraEntrada)<Double.valueOf(fechaHoraActual);*/
-
     }
 }

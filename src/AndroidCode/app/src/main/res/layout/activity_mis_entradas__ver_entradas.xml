@@ -71,7 +71,6 @@
         android:textSize="20dp"
         android:layout_weight="0.5"/>
 
-
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -81,6 +80,7 @@
             android:id="@+id/opcion1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="invisible"
             android:onClick="opcion1ButtonClicked"
             android:text="" />
 
@@ -88,6 +88,7 @@
             android:id="@+id/opcion2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="invisible"
             android:onClick="opcion2ButtonClicked"
             android:text="" />
 
@@ -95,6 +96,7 @@
             android:id="@+id/opcion3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="invisible"
             android:onClick="opcion3ButtonClicked"
             android:text="" />
     </RadioGroup>
