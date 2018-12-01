@@ -9,6 +9,9 @@ import android.graphics.Color;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Cliente;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Funcion;
+
 public class NotificationHelper {
 
     private Context mContext;
@@ -23,10 +26,15 @@ public class NotificationHelper {
     /**
      * Create and push the notification
      */
-    public void createNotification(String title, String message)
+    public void createNotification(String title, String message, String funcion, Cliente cli)
     {
         /**Creates an explicit intent for an Activity in your app**/
-        Intent resultIntent = new Intent(mContext , NotificationReceiverActivity.class);
+        Intent resultIntent = new Intent(mContext , VerEspectaculos_VerEntradas.class);
+        Funcion func= new Funcion(funcion);
+
+       resultIntent.putExtra("Funcion",func.getJsonString());
+
+        resultIntent.putExtra("IdCliente",cli.GetJsonString());
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(mContext,

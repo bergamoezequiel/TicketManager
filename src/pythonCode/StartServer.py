@@ -78,6 +78,25 @@ class Funciones(Resource):
 		}
 		return FuncionesFinal,200
 		
+		
+class FuncionesInfo(Resource):
+	def get(self,name):
+		
+		conn = sqlite3.connect('TicketManager.db')
+		c = conn.cursor()
+		for row in c.execute('SELECT * FROM FUNCIONES where ID_FUNCION=?',(name, )):
+			funcion = {
+			"IdFuncion": row[0],
+			"IdEspectaculo": row[1],
+			"Hora":row[3],
+			"Dia":row[4]
+			}
+			
+		conn.close()
+		
+		
+		return funcion,200
+		
 
 class Espectaculos(Resource):
 	def get(self):
@@ -238,6 +257,7 @@ api.add_resource(Clientes, "/Clientes")
 api.add_resource(Cliente, "/Cliente/<string:name>")
 api.add_resource(EmpresasEmisoras, "/Empresas")
 api.add_resource(Funciones, "/Funciones") #http://192.168.0.110:5000/Funciones?cuitEmp=30-69726350-7&IdEspectaculo=1-SPIDER ejemplo de invocacion
+api.add_resource(FuncionesInfo, "/Funcion/<string:name>")
 api.add_resource(Espectaculos,"/Espectaculos") #Espectaculos por empresa	http://192.168.0.110:5000/Espectaculos?cuitEmp=30-69726350-7
 api.add_resource(Entradas,"/Entradas")
 api.add_resource(Intereses,"/Intereses")
