@@ -9,17 +9,19 @@ public class Interes {
     private String Dia;
     private String IdFunciones;
     private String CantidadDeEntradas;
+    private boolean fueNotificado;
 
-    public Interes(JSONObject json){
+    public Interes(JSONObject json) {
         try {
             this.NombresEspectaculo = json.getString("NombreEspectaculo");
             this.NombreEmpresa = json.getString("NombreEmpresaEmisora");
-            this.Hora= json.getString("Hora");
+            this.Hora = json.getString("Hora");
             this.Dia = json.getString("Dia");
             this.IdFunciones = json.getString("IdFuncion");
-           this.CantidadDeEntradas = json.getString("CantidadDeEntradas");
+            this.CantidadDeEntradas = json.getString("CantidadDeEntradas");
+            this.fueNotificado = json.getInt("FueNotificado") == 1 ? true : false;
+        } catch (Exception e) {
         }
-        catch (Exception e){}
     }
 
     public String getHora() {
@@ -45,4 +47,9 @@ public class Interes {
     public String getNombresEspectaculo() {
         return NombresEspectaculo;
     }
+
+    public void setFueNotificado(boolean value) {
+        this.fueNotificado = value;
+    }
+    public boolean getFueNotificado(){return fueNotificado;}
 }

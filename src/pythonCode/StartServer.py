@@ -4,7 +4,7 @@ from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
 
 app = Flask(__name__)
-app.config['SERVER_NAME'] = '192.168.0.104:5000'
+app.config['SERVER_NAME'] = '192.168.0.13:5000'
 api = Api(app)
 
 
@@ -228,9 +228,16 @@ class Intereses(Resource):
 			if c.execute('SELECT count(*) FROM INTERESES where ID_CLIENTE=? and ID_FUNCION=?',(request.json["IdCliente"],request.json["IdFuncion"], )).fetchone()[0]>0:
 				Entradas={"error":1}
 				return Entradas,200
-			c.execute('INSERT INTO INTERESES VALUES (?,?)',(request.json["IdCliente"],request.json["IdFuncion"]))
+			c.execute('INSERT INTO INTERESES VALUES (?,?,?)',(request.json["IdCliente"],request.json["IdFuncion"],request.json["FueNotificado"]))
 			conn.commit()
 			return Entradas,200
+	def put(self):
+			Intereses={}
+			conn = sqlite3.connect('TicketManager.db')
+			c = conn.cursor()
+			c.execute('UPDATE INTERESES SET FUE_NOTIFICADO = ? WHERE ID_FUNCION = ?',(request.json["FueNotificado"],request.json["IdFuncion"]))
+			conn.commit()
+			return Intereses,200
 	def get(self):
 		Intereses=[]
 		conn = sqlite3.connect('TicketManager.db')
@@ -244,7 +251,7 @@ class Intereses(Resource):
 			"Dia":c2.execute('SELECT DIA FROM FUNCIONES where ID_FUNCION=?',(row[1], )).fetchone()[0],
 			"NombreEspectaculo":c2.execute('SELECT NOMBRE FROM ESPECTACULOS where ID_ESPECTACULO=(SELECT ID_ESPECTACULO from FUNCIONES where ID_FUNCION=?)',(row[1], )).fetchone()[0],
 			"NombreEmpresaEmisora":c2.execute('SELECT RAZON_SOCIAL FROM EMPRESAS_EMISORAS where CUIT=(SELECT CUIT_EMPRESA from FUNCIONES where ID_FUNCION=?)',(row[1], )).fetchone()[0],
-			
+			"FueNotificado" : row[2],
 			}
 			Intereses.append(interes);
 		conn.close()
@@ -256,12 +263,12 @@ class Intereses(Resource):
 api.add_resource(Clientes, "/Clientes")
 api.add_resource(Cliente, "/Cliente/<string:name>")
 api.add_resource(EmpresasEmisoras, "/Empresas")
-api.add_resource(Funciones, "/Funciones") #http://192.168.0.110:5000/Funciones?cuitEmp=30-69726350-7&IdEspectaculo=1-SPIDER ejemplo de invocacion
+api.add_resource(Funciones, "/Funciones") #http://192.168.0.13:5000/Funciones?cuitEmp=30-69726350-7&IdEspectaculo=1-SPIDER ejemplo de invocacion
 api.add_resource(FuncionesInfo, "/Funcion/<string:name>")
-api.add_resource(Espectaculos,"/Espectaculos") #Espectaculos por empresa	http://192.168.0.110:5000/Espectaculos?cuitEmp=30-69726350-7
+api.add_resource(Espectaculos,"/Espectaculos") #Espectaculos por empresa	http://192.168.0.13:5000/Espectaculos?cuitEmp=30-69726350-7
 api.add_resource(Entradas,"/Entradas")
 api.add_resource(Intereses,"/Intereses")
-api.add_resource(InfoCompletaEntradas,"/InformacionCompleta/Entradas")#http://192.168.0.110:5000/InformacionCompleta/Entradas?IdCliente=1
+api.add_resource(InfoCompletaEntradas,"/InformacionCompleta/Entradas")#http://192.168.0.13:5000/InformacionCompleta/Entradas?IdCliente=1
 api.add_resource(CodigosPromocionales,"/CodigosPromocionales")
 api.add_resource(CodigosPromocionalesPorCliente,"/<string:name>/CodigosPromocionales")
 

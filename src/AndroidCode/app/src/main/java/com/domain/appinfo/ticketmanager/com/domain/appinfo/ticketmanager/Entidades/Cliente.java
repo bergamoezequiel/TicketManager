@@ -53,6 +53,7 @@ public class Cliente {
         try {
             json.put("IdCliente", this.id);
             json.put("IdFuncion", IdFuncion);
+            json.put("FueNotificado",0);
         }catch(Exception e){}
         String URL= UrlBackend.URL+"/Intereses";
 
@@ -71,6 +72,27 @@ public class Cliente {
 
             Toast.makeText(cont,
                     "Alerta Generada", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void  actualizarInteres(String idFuncion , Context cont) {
+        JSONObject json= new JSONObject();
+        try {
+            json.put("IdCliente", this.id);
+            json.put("IdFuncion", idFuncion);
+            json.put("FueNotificado",1);
+        }catch(Exception e){}
+        String URL= UrlBackend.URL+"/Intereses";
+
+        try {
+            PutRestAPIDAO put = new PutRestAPIDAO();
+
+            String RespuestaActualizarInteres=put.execute(json.toString(),URL).get();
+
+            JSONObject jsonObj = new JSONObject(RespuestaActualizarInteres);
+
+        }catch(Exception e){
+
         }
     }
 

@@ -51,7 +51,7 @@ c.execute("INSERT INTO ENTRADAS VALUES ('4-FUNC','FIL1COL23','2')")
 
 
 c.execute('''CREATE TABLE INTERESES
-             (ID_CLIENTE text, ID_FUNCION text)''')
+             (ID_CLIENTE text, ID_FUNCION text, FUE_NOTIFICADO INTEGER)''')
 #c.execute("INSERT INTO INTERESES VALUES ('1','1-FUNC')")
 #c.execute("INSERT INTO INTERESES VALUES ('1','4-FUNC')")
 

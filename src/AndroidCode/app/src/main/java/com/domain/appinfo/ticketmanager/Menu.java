@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Cliente;
 import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.Interes;
+import com.domain.appinfo.ticketmanager.com.domain.appinfo.ticketmanager.Entidades.PutRestAPIDAO;
 
 import org.json.JSONObject;
 
@@ -24,10 +25,13 @@ public class Menu extends AppCompatActivity {
 
         Interes[] intereses=cliente.getIntereses();
         for(int i =0;i<intereses.length;i++){
-            if (Integer.valueOf(intereses[i].getCantidadDeEntradas())>0){
+            Interes interesActual = intereses[i];
+            if (Integer.valueOf(interesActual.getCantidadDeEntradas())>0 && !interesActual.getFueNotificado()){
                 NotificationHelper not= new NotificationHelper(this);
-                String mensaje="Hay entradas disponible para la funcion de "+intereses[i].getNombresEspectaculo()+"el dia"+intereses[i].getDia();
-                not.createNotification("Entradas Disponibles!",mensaje,intereses[i].getIdFunciones(),cliente);
+                String mensaje="Hay entradas disponible para la funcion de "+interesActual.getNombresEspectaculo()+"el dia"+interesActual.getDia();
+                not.createNotification("Entradas Disponibles!",mensaje,interesActual.getIdFunciones(),cliente);
+                intereses[i].setFueNotificado(true);
+                cliente.actualizarInteres(interesActual.getIdFunciones(),this);
             }
         }
 

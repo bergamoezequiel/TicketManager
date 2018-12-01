@@ -60,18 +60,11 @@ public class VerEspectaculos_VerEntradas extends AppCompatActivity {
                     boton.setVisibility(View.GONE);
                 }
                 for(int i=0;i<entradas.length;i++){
-
                     Ubicaciones[i]=entradas[i].Ubicacion;
-
-
-
                 }
-
-
         MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, Ubicaciones);
         final ListView listview = (ListView) findViewById(R.id.listView);
         listview.setAdapter(adapter);
-
     }
 
   
@@ -115,11 +108,7 @@ public class VerEspectaculos_VerEntradas extends AppCompatActivity {
        JSONObject json= new JSONObject();
 
         if(!hayEntradas) {
-          /*  try {
-                json.put("IdCliente", getIntent().getStringExtra("IdCliente"));
-                json.put("IdFuncion", getIntent().getStringExtra("IdFuncion"));
-            } catch (Exception e) {
-            }*/
+
             JSONObject CienteJSON=new JSONObject();
 
             try {
@@ -132,13 +121,6 @@ public class VerEspectaculos_VerEntradas extends AppCompatActivity {
         }else{
             Toast.makeText(this,
                     "Todavia hay entradas disponibles", Toast.LENGTH_SHORT).show();
-
         }
-
-
     }
-
-
-
-
 }
